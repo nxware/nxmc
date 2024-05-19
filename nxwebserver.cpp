@@ -312,7 +312,6 @@ void page_index_async(AsyncWebServerRequest *request) {
     response->println("<li><a href='uptime'>Uptime</a></li>");
     response->println("<li><a href='rssi'>RSSI</a></li>");
     response->println("<li><a href='items'>Items</a></li>");
-    response->println("<li><a href='a0'>A0</a></li>");
     response->println("<li><a href='display'>Display</a></li>");
     response->println("</ul>");
     //part_pins(request, response);

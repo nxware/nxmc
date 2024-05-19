@@ -58,13 +58,23 @@ class NxWifi : public Item {
     }
     virtual void page(Print* out, String param) override {
         out->print("NxWifi");
-        
     }
     virtual String val(String name) override {
+        if (name.equals("status")) {
+            return String(WiFi.status());
+        } else if (name.equals("localIP")) {
+            return String(WiFi.localIP())
+        } else if (name.equals("rssi")) {
+            return String(WiFi.RSSI())
+        }
         return "";
     }
     virtual bool cmd(String args[]) override {
-      if (args[0].equals("nxwifi")) {
+      if (args[0].equals("wifi")) {
+        if (args[1].equals("off")) {
+            WiFi.mode(WIFI_OFF);
+            return true;
+        }
         return true;
       } 
       return false;
@@ -135,4 +145,16 @@ void wifi_ap(String ssid, String pw) {
     WiFi.softAP(ssid, pw);
     dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
     dnsServer.start(/*DNS_PORT*/53, "*", local_IP); // fuer ein Captive portal"
+}
+
+void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_pw) {
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.begin(other_ssid, other_pw);
+  Serial.print(WiFi.softAP(ap_ssid, ap_pw/*, 1 , 0 , 8*/) ? "AP Ready" : "AP Failed");
+  Serial.print("\nSensonetz Access Point IP Adresse ");
+  Serial.println(WiFi.softAPIP()); // WiFi.localIP()
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
 }

@@ -39,7 +39,30 @@ String Item::val(String name) {
   return "unknown";
 }
 
-Item* root = NULL;
+class NxCmds : public Item { 
+  public:
+    void init() {}
+    virtual void setup() override {}
+    void loopActive() override {
+    }
+    String name() override {
+        return "NxCmds";
+    }
+    virtual void page(Print* out, String param) override {
+        out->print("NxCmds");
+    }
+    virtual String val(String name) override {
+        return "";
+    }
+    virtual bool cmd(String args[]) override {
+      if (args[0].equals("setTime")) {
+        setTime(args[1].toInt());
+      } 
+      return false;
+    }
+};
+
+Item* root = new NxCmds();
 
 void items_loop() {
   if (root != NULL) {
