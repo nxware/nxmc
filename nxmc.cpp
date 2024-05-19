@@ -52,6 +52,25 @@ void items_loop() {
   }
 }
 
+extern void split(String s, String res[]) {
+  //String[] res = new String[10];
+  int pos = 0;
+  int i = s.indexOf(' ');
+  while(i > -1) {
+    String c = s.substring(0, i);
+    c.trim();
+    res[pos] = c;
+    pos++;
+    s = s.substring(i);
+    if (s != NULL) {              // neu
+      s.trim();
+      i = s.indexOf(' ');
+    } else {                      // neu
+      i = -1;                     // neu
+    }                             // neu
+  }
+}
+
 boolean items_cmd(String args[]) {
   if (root != NULL) {
     Item* current = root;
