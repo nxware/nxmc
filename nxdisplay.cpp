@@ -22,7 +22,7 @@ void display_start() {
 }
 
 void display_clear() {
-    display.clear();
+    display.clearDisplay();
 }
 
 void display_display() {
