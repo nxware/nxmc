@@ -1,6 +1,8 @@
 
 #include <Arduino.h>
 
+#include "NTPClient.h" // wegen setTime
+
 #include <nxmc.h>
 
 //Item::Item() {}
