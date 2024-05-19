@@ -285,7 +285,7 @@ void page_index_async(AsyncWebServerRequest *request) {
     response->println("<body>");
     response->println("<div id='main'>");
     response->print("<h1>NxESP: ");
-    response->print(getName()->c_str());
+    // response->print(getName()->c_str());
     response->println("</h1>");
     response->print("<h2>");
     //response->println(NX_VERSION);
@@ -302,7 +302,7 @@ void page_index_async(AsyncWebServerRequest *request) {
     response->println("<li><a href='a0'>A0</a></li>");
     response->println("<li><a href='display'>Display</a></li>");
     response->println("</ul>");
-    part_pins(request, response);
+    //part_pins(request, response);
     response->println("<form action='cmd'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='text' /><input type='submit' value='exec' />");
     response->println("</form>");
     
