@@ -1,7 +1,7 @@
 
 #include <Arduino.h>
 
-#include "NTPClient.h" // wegen setTime
+#include <time.h> // wegen setTime
 
 #include <nxmc.h>
 
