@@ -21,6 +21,10 @@ void display_start() {
   display.clearDisplay();
 }
 
+void display_clear() {
+    display.clear();
+}
+
 void display_display() {
     display.display();
 }

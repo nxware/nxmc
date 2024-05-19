@@ -6,6 +6,7 @@
 #include <Arduino.h>
 
 extern void display_start();
+extern void display_clear();
 extern void display_display();
 
 extern void display_drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
