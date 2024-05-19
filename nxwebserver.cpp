@@ -25,9 +25,9 @@ const char* PARAM_MESSAGE = "message";
 
 
 String request_param(String name) {
-    if (requestAsync != null) {
+    if (requestAsync != NULL) {
         AsyncWebParameter* param = requestAsync->getParam(name);
-        if (param != null) {
+        if (param != NULL) {
             return param->value();
         }
     } 
@@ -162,8 +162,8 @@ void page_status_async(AsyncWebServerRequest *request) {
     "Display: " + display_status + "\n").c_str()
   );    */
    AsyncResponseStream *response = request->beginResponseStream("text/plain");
-   response->print("BootID: ");
-   response->println(bootid);
+   //response->print("BootID: ");
+   //response->println(bootid);
    #ifdef NX_DISPLAY
    response->println("Compile Option NX_DISPLAY");
    #endif
@@ -189,8 +189,8 @@ void page_status_async(AsyncWebServerRequest *request) {
    #endif
    response->print("FreeHeap: ");
    response->println(ESP.getFreeHeap());
-   response->print("Serial Baud: ");
-   response->println(NX_BAUD);
+   //response->print("Serial Baud: ");
+   //response->println(NX_BAUD);
    response->print("NX-Delay: ");
    response->println(getMainDelay());
    #ifdef NX_WIFI
@@ -245,40 +245,6 @@ void page_status_async(AsyncWebServerRequest *request) {
    request->send(response);
 }
 
-void part_pins(AsyncWebServerRequest *request, AsyncResponseStream *response) {
-    int* pindirs = getPinDirs();
-    for(int i = 0; i <= 16; i++) {
-        response->print("<div>");
-        response->print("Pin");
-        response->print(i);
-        response->print(": ");
-        if (pindirs[i]==1) {
-            // Als Output konfiguriert
-            response->print("OUT <a href='cmd?redirect=1&cmd=setd%20");
-            response->print(i);
-            response->print("%201%20e'>on</a> ");
-            response->print("<a href='cmd?redirect=1&cmd=setd%20");
-            response->print(i);
-            response->print("%200%20e'>off</a> ");
-            response->print("<a href='cmd?redirect=1&cmd=pulse%20");
-            response->print(i);
-            response->print("%201000%20e'>pulse</a>");
-        } else {
-           response->print("IN"); 
-        }
-        #ifdef ESP8266
-        if (i==0)  { response->print(" (D3)"); }
-        if (i==2)  { response->print(" (D4)"); }
-        if (i==12) { response->print(" (D6)"); }
-        if (i==13) { response->print(" (D7)"); }
-        if (i==14) { response->print(" (D5)"); }
-        if (i==15) { response->print(" (D8)"); }
-        if (i==16) { response->print(" (D0)"); }
-        #endif
-        response->println("</div>");
-    }
-}
-
 void page_cmd(AsyncWebServerRequest *request) {
     AsyncWebParameter* redirect = request->getParam("redirect");
     if (redirect == nullptr) {
@@ -322,7 +288,7 @@ void page_index_async(AsyncWebServerRequest *request) {
     response->print(getName()->c_str());
     response->println("</h1>");
     response->print("<h2>");
-    response->println(NX_VERSION);
+    //response->println(NX_VERSION);
     response->println("</h2>");
     #ifdef NX_CO2
     response->print(co2_get_percent());
@@ -334,12 +300,7 @@ void page_index_async(AsyncWebServerRequest *request) {
     response->println("<li><a href='rssi'>RSSI</a></li>");
     response->println("<li><a href='items'>Items</a></li>");
     response->println("<li><a href='a0'>A0</a></li>");
-    response->println("<li><a href='cfg'>CFG</a></li>");
     response->println("<li><a href='display'>Display</a></li>");
-    #ifdef NX_SENSORS
-    response->println("<li><a href='kompass'>Sensor Kompass</a></li>");
-    response->println("<li><a href='cmd?cmd=lus%20end'>Sensor LUX</a></li>");
-    #endif
     response->println("</ul>");
     part_pins(request, response);
     response->println("<form action='cmd'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='text' /><input type='submit' value='exec' />");
