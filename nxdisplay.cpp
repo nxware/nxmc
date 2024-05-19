@@ -19,7 +19,7 @@ class NxDisplay : public Item {
     virtual void setup() override {}
     void loopActive() override {
         hw_display.clearDisplay();
-        Item* current = root;
+        Item* current = item_get_root();
         while (current->__next != NULL) {
             current->display();
             current = current->__next;
