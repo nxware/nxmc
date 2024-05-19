@@ -30,6 +30,10 @@ void display_str(String value, int size, int x, int y) {
   hw_display.write(value.c_str());
 }
 
+void display_drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
+  hw_display.drawLine(x0, y0, x1, y1, SSD1306_WHITE);
+}
+
 void display_display() {
     hw_display.display();
 }
@@ -52,18 +56,18 @@ class NxDisplay : public Item {
             }
             current->display();
         } else {
-            display_value((int)(millis()-start_delay*1000)/1000, 1, 5, 5);
+            // TODO besser draw line
+            display_value((int)(millis()-start_delay*1000)/1000, 1, 5, 5); // läuft von -3 bis 0
         }
         hw_display.display();
     }
     String name() override {
-        return "NxWifi";
+        return "NxDisplay";
     }
     virtual void page(Print* out, String param) override {
         out->print("NxDisplay");
     }
     virtual String val(String name) override {
-
         return "";
     }
     virtual bool cmd(String args[]) override {
@@ -91,14 +95,3 @@ void display_start(int start_delay = 0) {
 void display_clear() {
     hw_display.clearDisplay();
 }
-
-
-
-void display_drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
-  hw_display.drawLine(x0, y0, x1, y1, SSD1306_WHITE);
-}
-
-
-
-
-
