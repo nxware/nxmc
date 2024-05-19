@@ -24,7 +24,7 @@ AsyncWebServerRequest *requestAsync = NULL;
 const char* PARAM_MESSAGE = "message";
 
 
-Strimg request_param(String name) {
+String request_param(String name) {
     if (requestAsync != null) {
         AsyncWebParameter* param = requestAsync->getParam(name);
         if (param != null) {

@@ -9,7 +9,7 @@
 
 extern void webserver_start();
 
-extern Strimg request_param(String name);
+extern String request_param(String name);
 
 extern void pages_response_async(const char*);
 
