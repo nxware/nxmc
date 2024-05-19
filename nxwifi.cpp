@@ -65,7 +65,7 @@ class NxWifi : public Item {
         } else if (name.equals("localIP")) {
             return WiFi.localIP().toString();
         } else if (name.equals("rssi")) {
-            return WiFi.RSSI().toString();
+            return String(WiFi.RSSI());
         }
         return "";
     }

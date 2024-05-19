@@ -3,6 +3,9 @@
   "version": "1.0.1",
   "description": "A \"Hello world\" program is a computer program that outputs \"Hello World\" (or some variant) on a display device",
   "keywords": "planet, happiness, people",
+  "dependencies": {
+     "https://github.com/PaulStoffregen/Time": "*"
+  },
   "repository":
   {
     "type": "git",
@@ -17,8 +20,7 @@
     }
   ],
   "license": "MIT",
-  "homepage": "https://www.helloworld.org/",
-  "dependencies": {  },
+  "homepage": "https://github.com/nxware/nxmc.git",
   "frameworks": "*",
   "platforms": "*"
 }
