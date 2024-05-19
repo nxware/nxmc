@@ -44,7 +44,7 @@ class NxDisplay : public Item {
 
 
 void display_start() {
-  NxDisplay* item = NxDisplay();
+  NxDisplay* item = new NxDisplay();
   item->activate();
   add_item(item);
 
