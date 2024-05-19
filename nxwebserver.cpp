@@ -135,6 +135,19 @@ void page_item(AsyncWebServerRequest *request) {
     request->send(response);
 }
 
+void page_val(AsyncWebServerRequest *request) {
+    Item* item = item_get(request->getParam("name")->value());
+    requestAsync = request;
+    AsyncResponseStream *response = request->beginResponseStream("text/html");
+    if (item != NULL) {
+        String vname = request->getParam("value")->value();
+        response->print(item->val(vname));
+
+        
+    }
+    request->send(response);
+}
+
 
 
 
@@ -325,6 +338,7 @@ void webserver_start() {
     serverAsync.on("/scan", [](AsyncWebServerRequest *request){ page_scan_async(request); });
     serverAsync.on("/items", HTTP_GET, [](AsyncWebServerRequest *request){ page_items(request);  });
     serverAsync.on("/item", HTTP_GET, [](AsyncWebServerRequest *request){ page_item(request);  });
+    serverAsync.on("/val", HTTP_GET, [](AsyncWebServerRequest *request){ page_val(request);  });
     serverAsync.on("/time", HTTP_GET, [](AsyncWebServerRequest *request){ page_time_async(request); });
     serverAsync.onNotFound(notFound);
     serverAsync.begin();

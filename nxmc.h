@@ -5,8 +5,6 @@
 
 #include <Arduino.h>
 
-extern int getMainDelay();
-
 class Item {
     public:
       Item* __next;
@@ -27,6 +25,7 @@ class Item {
 };
 
 
+extern int getMainDelay();
 extern void processCommand(String cmd);
 extern void items_loop();
 extern boolean items_cmd(String args[]);
