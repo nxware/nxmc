@@ -4,7 +4,7 @@
 #ifdef ESP32
   #include <HTTPClient.h>
   #include "esp_wifi.h"
-    #include <ESPmDNS.h>
+  #include <ESPmDNS.h>
   #include <DNSServer.h>
 #endif
 
@@ -12,6 +12,7 @@
   #include <ESP8266HTTPClient.h>
   #include <ESP8266WiFi.h>
   #include <ESP8266mDNS.h>
+  #include <DNSServer.h>
 #endif
 
 DNSServer dnsServer;
