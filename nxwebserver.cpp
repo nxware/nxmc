@@ -191,8 +191,8 @@ void page_status_async(AsyncWebServerRequest *request) {
    response->println(ESP.getFreeHeap());
    //response->print("Serial Baud: ");
    //response->println(NX_BAUD);
-   response->print("NX-Delay: ");
-   response->println(getMainDelay());
+   //response->print("NX-Delay: ");
+   //response->println(getMainDelay());
    #ifdef NX_WIFI
    response->print("Wifi Connected: ");
    if (WiFi.isConnected())  response->println("Yes"); else response->println("No");
