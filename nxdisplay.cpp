@@ -22,6 +22,14 @@ void display_value(float value, int size, int x, int y) {
   hw_display.write(_str);
 }
 
+void display_str(String value, int size, int x, int y) {
+  hw_display.setTextSize(size);      // Normal 1:1 pixel scale
+  hw_display.setTextColor(SSD1306_WHITE); // Draw white text
+  hw_display.setCursor(x, y);     // Start at top-left corner
+  hw_display.cp437(true);         // Use full 256 char 'Code Page 437' font
+  hw_display.write(value.c_str());
+}
+
 void display_display() {
     hw_display.display();
 }
@@ -44,7 +52,7 @@ class NxDisplay : public Item {
             }
             current->display();
         } else {
-            display_value((int)(millis()-start_delay*1000)/1000, 5,5);
+            display_value((int)(millis()-start_delay*1000)/1000, 1, 5, 5);
         }
         hw_display.display();
     }
@@ -94,10 +102,3 @@ void display_drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
 
 
 
-void display_str(String value, int size, int x, int y) {
-  hw_display.setTextSize(size);      // Normal 1:1 pixel scale
-  hw_display.setTextColor(SSD1306_WHITE); // Draw white text
-  hw_display.setCursor(x, y);     // Start at top-left corner
-  hw_display.cp437(true);         // Use full 256 char 'Code Page 437' font
-  hw_display.write(value.c_str());
-}
