@@ -22,6 +22,10 @@ void display_value(float value, int size, int x, int y) {
   hw_display.write(_str);
 }
 
+void display_display() {
+    hw_display.display();
+}
+
 class NxDisplay : public Item { 
   public:
     int start_delay = 0;
@@ -80,9 +84,7 @@ void display_clear() {
     hw_display.clearDisplay();
 }
 
-void display_display() {
-    hw_display.display();
-}
+
 
 void display_drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1) {
   hw_display.drawLine(x0, y0, x1, y1, SSD1306_WHITE);
