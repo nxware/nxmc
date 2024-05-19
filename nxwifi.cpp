@@ -63,9 +63,9 @@ class NxWifi : public Item {
         if (name.equals("status")) {
             return String(WiFi.status());
         } else if (name.equals("localIP")) {
-            return WiFi.localIP()->toString();
+            return WiFi.localIP().toString();
         } else if (name.equals("rssi")) {
-            return WiFi.RSSI()->toString();
+            return WiFi.RSSI().toString();
         }
         return "";
     }
