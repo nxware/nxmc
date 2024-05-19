@@ -4,10 +4,10 @@
   "description": "A \"Hello world\" program is a computer program that outputs \"Hello World\" (or some variant) on a display device",
   "keywords": "planet, happiness, people",
   "dependencies": {
-     "https://github.com/PaulStoffregen/Time": "*",
-     "https://github.com/adafruit/Adafruit-GFX-Library": "*",
-     "https://github.com/adafruit/Adafruit_SSD1306": "*",
-     "https://github.com/adafruit/Adafruit_BusIO": "^1.16.0"
+     "PaulStoffregen/Time": "*",
+     "adafruit/Adafruit-GFX-Library": "*",
+     "adafruit/Adafruit_SSD1306": "*",
+     "adafruit/Adafruit_BusIO": "^1.16.0"
   },
   "repository":
   {
