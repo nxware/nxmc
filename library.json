@@ -6,8 +6,8 @@
   "dependencies": {
      "PaulStoffregen/Time": "*",
      "adafruit/Adafruit-GFX-Library": "*",
-     "adafruit/Adafruit_SSD1306": "*",
-     "adafruit/Adafruit_BusIO": "^1.16.0"
+     "adafruit/Adafruit SSD1306": "*",
+     "adafruit/Adafruit BusIO": "^1.16.0"
   },
   "repository":
   {
