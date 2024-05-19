@@ -15,6 +15,10 @@
   #include <DNSServer.h>
 #endif
 
+#include <nxmc.h>
+
+
+boolean item_loaded = false;
 DNSServer dnsServer;
 IPAddress local_IP(10,42,0,1);
 IPAddress gateway(10,42,0,1);
@@ -41,6 +45,31 @@ void wget(String url) {
     #endif 
     //    #endif
 }
+
+class NxWifi : public Item { 
+  public:
+    void init() {}
+    virtual void setup() override {}
+    void loopActive() override {
+        dnsServer.processNextRequest();
+    }
+    String name() override {
+        return "NxWifi";
+    }
+    virtual void page(Print* out, String param) override {
+        out->print("NxWifi");
+        
+    }
+    virtual String val(String name) override {
+        return "";
+    }
+    virtual bool cmd(String args[]) override {
+      if (args[0].equals("nxwifi")) {
+        return true;
+      } 
+      return false;
+    }
+};
 
 boolean wlanConnect(const char* ssid, const char* password, boolean serial_output) {
     if (serial_output) {
@@ -82,6 +111,11 @@ boolean wlanConnect(const char* ssid, const char* password, boolean serial_outpu
 }
 
 void wifi_ap(String ssid, String pw) {
+    if (!item_loaded) {
+        NxWifi* item = new NxWifi();
+        item->activate();
+        add_item(item);
+    }
     // mehr zu special events: https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#generic-class
     #ifdef ESP32
     WiFi.onStationModeGotIP([](WiFiEventStationModeGotIP ipInfo) { // As soon WiFi is connected, start NTP Client
