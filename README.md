@@ -31,6 +31,8 @@ class Item:
       virtual void activate();
 ```
 
+## nxwifi.h
+
 ## nxwebserver.h
 ```
 #include <nxwebserver.h>
@@ -48,6 +50,16 @@ Routen:
 - `/val?name=ItemName&value=ValueName`
 
 
+## nxdisplay.h
+```
+void display_start();
+void display_clear();
+void display_display();
+
+void display_drawLine(int16_t x0, int16_t y0, int16_t x1, int16_t y1);
+void display_value(float value, int size, int x, int y);
+void display_str(String value, int size, int x, int y);
+```
 
 ## Deployment
 

@@ -12,6 +12,7 @@ class Item {
       virtual void setup();
       virtual void loop();
       virtual void loopActive();
+      virtual void display();
       virtual bool cmd(String args[]);
       virtual String name();
       virtual String type();

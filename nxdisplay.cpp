@@ -3,6 +3,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
+#include <nxmc.h>
+
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 32 // OLED display height, in pixels
 
@@ -11,7 +13,40 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 
+class NxDisplay : public Item { 
+  public:
+    void init() {}
+    virtual void setup() override {}
+    void loopActive() override {
+        display.clearDisplay();
+        Item* current = root;
+        while (current->__next != NULL) {
+            current->display();
+            current = current->__next;
+        }
+        current->display();
+        display.display();
+    }
+    String name() override {
+        return "NxWifi";
+    }
+    virtual void page(Print* out, String param) override {
+        out->print("NxDisplay");
+    }
+    virtual String val(String name) override {
+
+        return "";
+    }
+    virtual bool cmd(String args[]) override {
+      return false;
+    }
+};
+
+
 void display_start() {
+  NxDisplay* item = NxDisplay();
+  item->activate();
+  add_item(item);
 
   if(!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));

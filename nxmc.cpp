@@ -16,6 +16,7 @@ void Item::loop() {
 void Item::activate() {
   this->active = true;
 }
+void Item::display() {}
 void Item::loopActive() {}
 boolean Item::isActive() {
   return this->active;
