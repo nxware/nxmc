@@ -98,3 +98,35 @@ Item* item_get(String name) {
     return NULL;
   }
 }
+
+void processResponse(const char* str) {
+  //#ifdef NX_SERVER
+  //  pages_response_async(str);
+  //#endif
+  //#ifdef NX_SERIAL
+  //  #ifdef NX_SERIAL_RESPONSE
+  //  Serial.println(str);
+  //  #endif
+  // #endif 
+  String r[2] = {"response", str};
+  items_cmd(r);
+}
+
+
+void processCommandArray(String args[], String cmd) {
+  if (!items_cmd(args)) {
+    if (!args[0].equals("response")) {
+      processResponse(String("Error: Unknown CMD." + cmd).c_str());
+    }
+  } 
+}
+
+void processCommand(String cmd) {
+  String args[] = {"", "", "", "", "", "", "", "", "", "", "", ""}; // 12 Elemente
+  if (cmd == NULL) {
+    return;
+  }
+  split(cmd + " ;", args);
+  args[0].toLowerCase();
+  processCommandArray(args, cmd);
+} 

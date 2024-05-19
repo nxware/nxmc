@@ -26,6 +26,8 @@ class Item {
       boolean active = false;
 };
 
+
+extern void processCommand(String cmd);
 extern void items_loop();
 extern boolean items_cmd(String args[]);
 extern Item* add_item(Item* item);
