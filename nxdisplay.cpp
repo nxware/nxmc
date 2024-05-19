@@ -15,16 +15,24 @@ Adafruit_SSD1306 hw_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 class NxDisplay : public Item { 
   public:
+    int start_delay = 0;
+    NxDisplay(int start_delay = 0) {
+        this->start_delay = start_delay;
+    }
     void init() {}
     virtual void setup() override {}
     void loopActive() override {
         hw_display.clearDisplay();
-        Item* current = item_get_root();
-        while (current->__next != NULL) {
+        if (start_delay*1000 < millis()) {
+            Item* current = item_get_root();
+            while (current->__next != NULL) {
+                current->display();
+                current = current->__next;
+            }
             current->display();
-            current = current->__next;
+        } else {
+            display_value((int)(millis()-start_delay*1000)/1000, 5,5);
         }
-        current->display();
         hw_display.display();
     }
     String name() override {
@@ -43,8 +51,8 @@ class NxDisplay : public Item {
 };
 
 
-void display_start() {
-  NxDisplay* item = new NxDisplay();
+void display_start(int start_delay = 0) {
+  NxDisplay* item = new NxDisplay(start_delay);
   item->activate();
   add_item(item);
 
@@ -54,6 +62,9 @@ void display_start() {
 
   hw_display.setRotation(2);
   hw_display.clearDisplay();
+
+  display_str("start", 2, 5, 15);  
+  display_display();
 }
 
 void display_clear() {
