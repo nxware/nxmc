@@ -25,6 +25,10 @@ class Item {
       boolean active = false;
 };
 
+/**
+ * Liefert die vergangenen Millisekunden seit time zurueck.
+ */
+extern unsigned long since(time);
 
 extern int getMainDelay();
 extern void processCommand(String cmd);
