@@ -6,6 +6,13 @@
 
 #include <nxmc.h>
 
+/**
+ * Liefert die vergangenen Millisekunden seit time zurueck.
+ */
+unsigned long since(time) {
+  return millis()-time;
+}
+
 //Item::Item() {}
 /** wird beim add_item aufgerufen */void Item::setup() {}
 void Item::loop() {
