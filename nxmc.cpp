@@ -43,6 +43,74 @@ String Item::val(String name) {
   return "unknown";
 }
 
+Pin::Pin(int pin, String dir = "out") {
+  this->_name = "pin" + pin;
+  this->mode = dir;
+}
+virtual bool Pin::cmd(String args[]) override {
+  if (this->_name.equals(args[0])) {
+    if (args[1].equals("1")) {
+      this->value = 1;
+    } else if (args[1].equals("0")) {
+      this->value = 1;
+    }
+    return true;
+  } else {
+    return false;
+  }
+}
+virtual String Pin::name() override {
+  return this->_name;
+}
+virtual String Pin::type() override {
+  return "Pin";
+}
+virtual void Pin::loopActive()override {
+  if (this->mode->equals("init_out")) {
+    pinMode(this->pin, OUTPUT);
+    this->mode = "out";
+  } else if (this->mode->equals("init_in")) {
+    pinMode(this->pin, INPUT);
+    this->mode = "in";
+  }
+  if (this->mode->equals("out")) {
+    digitalWrite(this->pin, this->value);
+  } else if (this->mode->equals("in")) {
+    this->value = digitalRead(this->pin);
+  } else if (this->mode->equals("out_pulse")) {
+    digitalWrite(this->pin, 1);
+    deplay(1000);
+    digitalWrite(this->pin, 0);
+    this->mode = "out";
+  } else if (this->mode->equals("out_tone")) {
+    tone(this->pin, 440, 1000);
+    digitalWrite(this->pin, 0);
+    this->mode = "out";
+  } else if (this->mode->equals("out_blink")) {
+    this->value = this->value==1 ? 0 : 1;
+    digitalWrite(this->pin, this->value);
+  }
+}
+virtual String Pin::val(String name) override {
+  if (name.equals("mode")) {
+    return this->mode;
+  } else  (name.equals("value")) {
+    return this->value;
+  }
+  return "";
+}
+virtual void Pin::page(Print* out, String param) override {
+  out->print("Pin: ");
+  out->print(this->pin);
+  out->print("Mode: ");
+  out->print(this->mode);
+  out->print("Value: ");
+  out->print(this->value);
+}
+virtual void Pin::pageDetail(Print* out) override {
+
+}
+
 class NxCmds : public Item { 
   public:
     void init() {}
@@ -61,7 +129,9 @@ class NxCmds : public Item {
     virtual bool cmd(String args[]) override {
       if (args[0].equals("setTime")) {
         setTime(args[1].toInt());
-      } 
+      } else if (args[0].equals("gpio")) { // genauer befehl   gpio init_out 1
+        add_item(new Pin(args[2].toInt(), args[1]))->activate();
+      }
       return false;
     }
 };

@@ -26,6 +26,23 @@ class Item {
 };
 
 
+class Pin : public Item {
+    public:
+      int pin;
+      int value = -1;
+      String _name;
+      String mode;
+		  Pin(int pin, String dir = "out");
+      virtual bool cmd(String args[]);
+      virtual String name();
+      virtual String type();
+      virtual String val(String name);
+      virtual void loopActive();
+      virtual void page(Print* out, String param);
+      virtual void pageDetail(Print* out);
+};
+
+
 extern int getMainDelay();
 extern void processCommand(String cmd);
 extern void items_loop();

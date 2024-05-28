@@ -285,6 +285,10 @@ void page_time_async(AsyncWebServerRequest *request) {
     request->send(response);
 }
 
+String setup_button(String cmd, String title) {
+    return "<form action='cmd'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='hidden' text='"+cmd+"' /><input type='submit' value='"+title+"' /></form>";
+}
+
 void page_index_async(AsyncWebServerRequest *request) {
     //request->send(200, "text/plain", NX_VERSION);
     AsyncResponseStream *response = request->beginResponseStream("text/html");
@@ -317,6 +321,30 @@ void page_index_async(AsyncWebServerRequest *request) {
     //part_pins(request, response);
     response->println("<form action='cmd'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='text' /><input type='submit' value='exec' />");
     response->println("</form>");
+
+    #ifdef WEMOS_D1
+    response->println("Wemos D1");
+    response->println(setup_button("gpio init_out 14", "Init S1/14 Out"));
+    response->println(setup_button("gpio init_out 2", "Init S2/2 Out"));
+    response->println(setup_button("gpio init_out 12", "Init S3/12 Out"));
+    response->println(setup_button("gpio init_out 13", "Init S4/13 Out"));
+    response->println(setup_button("gpio init_out 0", "Init S5/0 Out"));
+    response->println(setup_button("gpio init_out 16", "Init S6/16 Out"));
+    response->println(setup_button("gpio init_out 19", "Init S7/19 Out"));
+    response->println(setup_button("gpio init_out 15", "Init S8/15 Out"));
+    #endif
+    #ifdef ESP32
+    response->println("ESP32");
+    response->println(setup_button("gpio init_out 2", "Init Int LED Out"));
+    response->println(setup_button("gpio init_out 26", "Init S1/26 Out"));
+    response->println(setup_button("gpio init_out 18", "Init S2/18 Out"));
+    response->println(setup_button("gpio init_out 19", "Init S3/19 Out"));
+    response->println(setup_button("gpio init_out 23", "Init S4/23 Out"));
+    response->println(setup_button("gpio init_out 5", "Init S5/5 Out"));
+    response->println(setup_button("gpio init_out 27", "Init S6/27 Out"));
+    response->println(setup_button("gpio init_out 25", "Init S7/25 Out"));
+    response->println(setup_button("gpio init_out 32", "Init S8/32 Out"));
+    #endif
     
     response->println("</div>");
     response->println("</body>");
