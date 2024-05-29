@@ -118,6 +118,56 @@ virtual void Pin::pageDetail(Print* out) override {
 
 }
 
+
+HotPin::Pin(int pin) {
+  this->_name = "pin" + pin;
+}
+virtual bool HotPin::cmd(String args[]) override {
+  if (this->_name.equals(args[0])) {
+    if (args[1].equals("trigger")) {
+      this->value = 1;
+      this->lasttrigger = millis();
+      digitalWrite(this->pin, 1);
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+virtual String HotPin::name() override {
+  return this->_name;
+}
+virtual String HotPin::type() override {
+  return "HotPin";
+}
+virtual void HotPin::loopActive()override {
+  if (since(this->lasttrigger) > this->threshold) {
+    this->value = 0;
+    digitalWrite(this->pin, 0);
+  }
+}
+virtual String HotPin::val(String name) override {
+  if (name.equals("mode")) {
+    return "out";
+  } else  (name.equals("value")) {
+    return this->value;
+  }
+  return "";
+}
+virtual void HotPin::page(Print* out, String param) override {
+  out->print("Pin: ");
+  out->print(this->pin);
+  out->print("Value: ");
+  out->print(this->value);
+  out->print("Last Trigger: ");
+  out->print(since(this->lasttrigger));
+}
+virtual void HotPin::pageDetail(Print* out) override {
+
+}
+
 class NxCmds : public Item { 
   public:
     void init() {}
@@ -138,6 +188,8 @@ class NxCmds : public Item {
         setTime(args[1].toInt());
       } else if (args[0].equals("gpio")) { // genauer befehl   gpio init_out 1
         add_item(new Pin(args[2].toInt(), args[1]))->activate();
+      } else if (args[0].equals("hotpin")) {
+        add_item(new HotPin(args[1].toInt()))->activate();
       }
       return false;
     }
