@@ -86,7 +86,7 @@ void Pin::loopActive() {
     this->value = digitalRead(this->pin);
   } else if (this->mode.equals("out_pulse")) {
     digitalWrite(this->pin, 1);
-    deplay(1000);
+    delay(1000);
     digitalWrite(this->pin, 0);
     this->mode = "out";
   } else if (this->mode.equals("out_tone")) {
@@ -101,7 +101,7 @@ void Pin::loopActive() {
 String Pin::val(String name) {
   if (name.equals("mode")) {
     return this->mode;
-  } else  (name.equals("value")) {
+  } else if (name.equals("value")) {
     return this->value;
   }
   return "";
@@ -130,7 +130,7 @@ void Pin::pageDetail(Print* out)  {
 }
 
 
-HotPin::Pin(int pin) {
+HotPin::HotPin(int pin) {
   this->_name = "pin" + pin;
 }
 bool HotPin::cmd(String args[]) {
