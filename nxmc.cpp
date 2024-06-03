@@ -73,27 +73,27 @@ virtual String Pin::type() override {
   return "Pin";
 }
 virtual void Pin::loopActive()override {
-  if (this->mode->equals("init_out")) {
+  if (this->mode.equals("init_out")) {
     pinMode(this->pin, OUTPUT);
     this->mode = "out";
-  } else if (this->mode->equals("init_in")) {
+  } else if (this->mode.equals("init_in")) {
     pinMode(this->pin, INPUT);
     this->mode = "in";
   }
-  if (this->mode->equals("out")) {
+  if (this->mode.equals("out")) {
     digitalWrite(this->pin, this->value);
-  } else if (this->mode->equals("in")) {
+  } else if (this->mode.equals("in")) {
     this->value = digitalRead(this->pin);
-  } else if (this->mode->equals("out_pulse")) {
+  } else if (this->mode.equals("out_pulse")) {
     digitalWrite(this->pin, 1);
     deplay(1000);
     digitalWrite(this->pin, 0);
     this->mode = "out";
-  } else if (this->mode->equals("out_tone")) {
+  } else if (this->mode.equals("out_tone")) {
     tone(this->pin, 440, 1000);
     digitalWrite(this->pin, 0);
     this->mode = "out";
-  } else if (this->mode->equals("out_blink")) {
+  } else if (this->mode.equals("out_blink")) {
     this->value = this->value==1 ? 0 : 1;
     digitalWrite(this->pin, this->value);
   }
