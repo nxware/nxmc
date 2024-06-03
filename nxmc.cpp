@@ -98,7 +98,7 @@ void Pin::loopActive() {
     digitalWrite(this->pin, this->value);
   }
 }
-String Pin::val(String name) override {
+String Pin::val(String name) {
   if (name.equals("mode")) {
     return this->mode;
   } else  (name.equals("value")) {
@@ -106,7 +106,7 @@ String Pin::val(String name) override {
   }
   return "";
 }
-void Pin::page(Print* out, String param) override {
+void Pin::page(Print* out, String param) {
   out->print("Pin: ");
   out->print(this->pin);
   out->print("Mode: ");
@@ -114,7 +114,7 @@ void Pin::page(Print* out, String param) override {
   out->print("Value: ");
   out->print(this->value);
 }
-void Pin::pageDetail(Print* out) override {
+void Pin::pageDetail(Print* out)  {
   out->print("Pin: ");
   out->print(this->pin);
   out->print("<br />Mode: ");
@@ -133,7 +133,7 @@ void Pin::pageDetail(Print* out) override {
 HotPin::Pin(int pin) {
   this->_name = "pin" + pin;
 }
-bool HotPin::cmd(String args[]) override {
+bool HotPin::cmd(String args[]) {
   if (this->_name.equals(args[0])) {
     if (args[1].equals("trigger")) {
       this->value = 1;
@@ -147,19 +147,19 @@ bool HotPin::cmd(String args[]) override {
     return false;
   }
 }
-String HotPin::name() override {
+String HotPin::name() {
   return this->_name;
 }
-String HotPin::type() override {
+String HotPin::type() {
   return "HotPin";
 }
-void HotPin::loopActive()override {
+void HotPin::loopActive() {
   if (since(this->lasttrigger) > this->threshold) {
     this->value = 0;
     digitalWrite(this->pin, 0);
   }
 }
-String HotPin::val(String name) override {
+String HotPin::val(String name) {
   if (name.equals("mode")) {
     return "out";
   } else  (name.equals("value")) {
@@ -167,7 +167,7 @@ String HotPin::val(String name) override {
   }
   return "";
 }
-void HotPin::page(Print* out, String param) override {
+void HotPin::page(Print* out, String param)  {
   out->print("Pin: ");
   out->print(this->pin);
   out->print("Value: ");
@@ -175,7 +175,7 @@ void HotPin::page(Print* out, String param) override {
   out->print("Last Trigger: ");
   out->print(since(this->lasttrigger));
 }
-void HotPin::pageDetail(Print* out) override {
+void HotPin::pageDetail(Print* out)  {
 
 }
 
