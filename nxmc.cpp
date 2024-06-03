@@ -100,9 +100,9 @@ void Pin::loopActive() {
 }
 String Pin::val(String name) {
   if (name.equals("mode")) {
-    return this->mode;
+    return String(this->mode);
   } else if (name.equals("value")) {
-    return this->value;
+    return String(this->value);
   }
   return "";
 }
@@ -162,7 +162,7 @@ void HotPin::loopActive() {
 String HotPin::val(String name) {
   if (name.equals("mode")) {
     return "out";
-  } else  (name.equals("value")) {
+  } else if (name.equals("value")) {
     return this->value;
   }
   return "";
