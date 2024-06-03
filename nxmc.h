@@ -28,7 +28,7 @@ class Item {
 /**
  * Liefert die vergangenen Millisekunden seit time zurueck.
  */
-extern int since(time);
+extern int since(int time);
 
 class Pin : public Item {
     public:

@@ -9,7 +9,7 @@
 /**
  * Liefert die vergangenen Millisekunden seit time zurueck.
  */
-int since(time) {
+int since(int time) {
   return millis()-time;
 }
 
