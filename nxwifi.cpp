@@ -2,6 +2,8 @@
 #include <Arduino.h>
 
 #ifdef ESP32
+  #include <WiFi.h>
+  #include <AsyncTCP.h>
   #include <HTTPClient.h>
   #include "esp_wifi.h"
   #include <ESPmDNS.h>
