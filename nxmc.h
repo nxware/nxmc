@@ -7,7 +7,7 @@
 
 class Item {
     public:
-      Item* __next;
+      Item* __next = NULL;
 		  //Item();
       virtual void setup();
       virtual void loop();
