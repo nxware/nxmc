@@ -54,7 +54,7 @@ Pin::Pin(int pin, String dir = "out") {
   this->_name = "pin" + pin;
   this->mode = dir;
 }
-virtual bool Pin::cmd(String args[]) override {
+bool Pin::cmd(String args[]) override {
   if (this->_name.equals(args[0])) {
     if (args[1].equals("1")) {
       this->value = 1;
@@ -66,13 +66,13 @@ virtual bool Pin::cmd(String args[]) override {
     return false;
   }
 }
-virtual String Pin::name() override {
+String Pin::name() override {
   return this->_name;
 }
-virtual String Pin::type() override {
+String Pin::type() override {
   return "Pin";
 }
-virtual void Pin::loopActive()override {
+void Pin::loopActive()override {
   if (this->mode.equals("init_out")) {
     pinMode(this->pin, OUTPUT);
     this->mode = "out";
@@ -98,7 +98,7 @@ virtual void Pin::loopActive()override {
     digitalWrite(this->pin, this->value);
   }
 }
-virtual String Pin::val(String name) override {
+String Pin::val(String name) override {
   if (name.equals("mode")) {
     return this->mode;
   } else  (name.equals("value")) {
@@ -106,7 +106,7 @@ virtual String Pin::val(String name) override {
   }
   return "";
 }
-virtual void Pin::page(Print* out, String param) override {
+void Pin::page(Print* out, String param) override {
   out->print("Pin: ");
   out->print(this->pin);
   out->print("Mode: ");
@@ -114,7 +114,7 @@ virtual void Pin::page(Print* out, String param) override {
   out->print("Value: ");
   out->print(this->value);
 }
-virtual void Pin::pageDetail(Print* out) override {
+void Pin::pageDetail(Print* out) override {
   out->print("Pin: ");
   out->print(this->pin);
   out->print("<br />Mode: ");
@@ -133,7 +133,7 @@ virtual void Pin::pageDetail(Print* out) override {
 HotPin::Pin(int pin) {
   this->_name = "pin" + pin;
 }
-virtual bool HotPin::cmd(String args[]) override {
+bool HotPin::cmd(String args[]) override {
   if (this->_name.equals(args[0])) {
     if (args[1].equals("trigger")) {
       this->value = 1;
@@ -147,19 +147,19 @@ virtual bool HotPin::cmd(String args[]) override {
     return false;
   }
 }
-virtual String HotPin::name() override {
+String HotPin::name() override {
   return this->_name;
 }
-virtual String HotPin::type() override {
+String HotPin::type() override {
   return "HotPin";
 }
-virtual void HotPin::loopActive()override {
+void HotPin::loopActive()override {
   if (since(this->lasttrigger) > this->threshold) {
     this->value = 0;
     digitalWrite(this->pin, 0);
   }
 }
-virtual String HotPin::val(String name) override {
+String HotPin::val(String name) override {
   if (name.equals("mode")) {
     return "out";
   } else  (name.equals("value")) {
@@ -167,7 +167,7 @@ virtual String HotPin::val(String name) override {
   }
   return "";
 }
-virtual void HotPin::page(Print* out, String param) override {
+void HotPin::page(Print* out, String param) override {
   out->print("Pin: ");
   out->print(this->pin);
   out->print("Value: ");
@@ -175,7 +175,7 @@ virtual void HotPin::page(Print* out, String param) override {
   out->print("Last Trigger: ");
   out->print(since(this->lasttrigger));
 }
-virtual void HotPin::pageDetail(Print* out) override {
+void HotPin::pageDetail(Print* out) override {
 
 }
 
