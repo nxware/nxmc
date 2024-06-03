@@ -51,6 +51,7 @@ String Item::val(String name) {
 }
 
 Pin::Pin(int pin, String dir) {
+  this->pin = pin;
   this->_name = "pin" + pin;
   this->mode = dir;
 }
