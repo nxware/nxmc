@@ -46,6 +46,23 @@ class Pin : public Item {
       virtual void pageDetail(Print* out);
 };
 
+class HotPin : public Item {
+    public:
+      int pin;
+      int value = -1;
+      String _name;
+      int lasttrigger = 0;
+      int threshold = 500;
+		  HotPin(int pin);
+      virtual bool cmd(String args[]);
+      virtual String name();
+      virtual String type();
+      virtual String val(String name);
+      virtual void loopActive();
+      virtual void page(Print* out, String param);
+      virtual void pageDetail(Print* out);
+};
+
 
 extern int getMainDelay();
 extern void processCommand(String cmd);
