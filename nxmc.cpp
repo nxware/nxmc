@@ -219,7 +219,7 @@ void items_loop() {
   }
 }
 
-extern void split(String s, String res[]) {
+void split(String s, String res[]) {
   //String[] res = new String[10];
   int pos = 0;
   int i = s.indexOf(' ');
