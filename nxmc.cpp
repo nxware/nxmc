@@ -163,7 +163,7 @@ String HotPin::val(String name) {
   if (name.equals("mode")) {
     return "out";
   } else if (name.equals("value")) {
-    return this->value;
+    return String(this->value);
   }
   return "";
 }
