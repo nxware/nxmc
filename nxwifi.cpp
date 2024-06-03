@@ -130,12 +130,12 @@ void wifi_ap(String ssid, String pw) {
     }
     // mehr zu special events: https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#generic-class
     #ifdef ESP32
-    WiFi.onStationModeGotIP([](WiFiEventStationModeGotIP ipInfo) { // As soon WiFi is connected, start NTP Client
-        Serial.printf("Got IP: %s\r\n", WiFi.localIP().toString().c_str());
+    //WiFi.onStationModeGotIP([](WiFiEventStationModeGotIP ipInfo) { // As soon WiFi is connected, start NTP Client
+    //    Serial.printf("Got IP: %s\r\n", WiFi.localIP().toString().c_str());
         //NTP.begin("pool.ntp.org", 1, true);
         //NTP.setInterval(63);
-    });   
-    WiFi.onSoftAPModeStationConnected(&onStationConnected);
+    //});   
+    //WiFi.onSoftAPModeStationConnected(&onStationConnected);
     #endif
 
     #ifdef ESP8266
