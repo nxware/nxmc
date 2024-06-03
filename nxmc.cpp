@@ -9,7 +9,7 @@
 /**
  * Liefert die vergangenen Millisekunden seit time zurueck.
  */
-unsigned long since(time) {
+int since(time) {
   return millis()-time;
 }
 
@@ -115,7 +115,18 @@ virtual void Pin::page(Print* out, String param) override {
   out->print(this->value);
 }
 virtual void Pin::pageDetail(Print* out) override {
-
+  out->print("Pin: ");
+  out->print(this->pin);
+  out->print("<br />Mode: ");
+  out->print(this->mode);
+  out->print("<br />Value: ");
+  out->print(this->value);
+  out->print("<br />Flags: ");
+  if (this->value == 0) {
+    out->print("gpio_is_low");
+  } else {
+    out->print("gpio_is_high");
+  }
 }
 
 class NxCmds : public Item { 

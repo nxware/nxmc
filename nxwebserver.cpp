@@ -130,7 +130,7 @@ void page_item(AsyncWebServerRequest *request) {
     AsyncResponseStream *response = request->beginResponseStream("text/html");
     if (item != NULL) {
         response->println("Item");
-        item->page(response, "");
+        item->pageDetail(response);
     }
     request->send(response);
 }
