@@ -50,11 +50,11 @@ String Item::val(String name) {
   return "unknown";
 }
 
-Pin::Pin(int pin, String dir = "out") {
+Pin::Pin(int pin, String dir) {
   this->_name = "pin" + pin;
   this->mode = dir;
 }
-bool Pin::cmd(String args[]) override {
+bool Pin::cmd(String args[]) {
   if (this->_name.equals(args[0])) {
     if (args[1].equals("1")) {
       this->value = 1;
@@ -66,13 +66,13 @@ bool Pin::cmd(String args[]) override {
     return false;
   }
 }
-String Pin::name() override {
+String Pin::name() {
   return this->_name;
 }
-String Pin::type() override {
+String Pin::type() {
   return "Pin";
 }
-void Pin::loopActive()override {
+void Pin::loopActive() {
   if (this->mode.equals("init_out")) {
     pinMode(this->pin, OUTPUT);
     this->mode = "out";
