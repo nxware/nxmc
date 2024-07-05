@@ -112,7 +112,7 @@ void page_items(AsyncWebServerRequest *request) {
         response->print("<div><div style='font-size: 120%;'>");
         response->print(item->name());
         if (item->isActive()) { response->print(" (active)"); }
-        response->print("</div>");
+        response->print("</div>\n");
         String param = "";
         if (request->hasParam(item->name())) {
             param = request->getParam(item->name())->value();
