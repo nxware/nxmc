@@ -61,6 +61,10 @@ bool Pin::cmd(String args[]) {
       this->value = 1;
     } else if (args[1].equals("0")) {
       this->value = 1;
+    } else if (args[1].equals("pulse")) {
+      this->mode = "out_pulse"
+    } else if (args[1].equals("tone")) {
+      this->mode = "out_tone"
     }
     return true;
   } else {
@@ -81,7 +85,7 @@ void Pin::loopActive() {
     pinMode(this->pin, INPUT);
     this->mode = "in";
   }
-  if (this->mode.equals("out")) {
+  if (this->mode.equals("out") && this->value!=-1) {
     digitalWrite(this->pin, this->value);
   } else if (this->mode.equals("in")) {
     this->value = digitalRead(this->pin);
