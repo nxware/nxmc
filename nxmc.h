@@ -65,6 +65,22 @@ class HotPin : public Item {
       virtual void pageDetail(Print* out);
 };
 
+class AnalogPin : public Item {
+    public:
+      int pin;
+      int value = -1;
+      String _name = "";
+      String comment = "";
+		  AnalogPin(int pin);
+      virtual bool cmd(String args[]);
+      virtual String name();
+      virtual String type();
+      virtual String val(String name);
+      virtual void loopActive();
+      virtual void page(Print* out, String param);
+      virtual void pageDetail(Print* out);
+};
+
 
 extern int getMainDelay();
 extern void processCommand(String cmd);

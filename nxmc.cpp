@@ -203,6 +203,53 @@ void HotPin::pageDetail(Print* out)  {
 
 }
 
+
+AnalogPin::AnalogPin(int pin) {
+  this->pin = pin;
+  this->_name = String("pin" + String(pin));
+}
+bool AnalogPin::cmd(String args[]) {
+  if (this->_name.equals(args[0])) {
+    if (args[1].equals("read")) {
+      this->value = 1;
+    } 
+    return true;
+  } else {
+    return false;
+  }
+}
+String AnalogPin::name() {
+  return this->_name;
+}
+String AnalogPin::type() {
+  return "AnalogPin";
+}
+void AnalogPin::loopActive() {
+  this->value = alalogRead(this->pin);
+}
+String AnalogPin::val(String name) {
+  if (name.equals("value")) {
+    return String(this->value);
+  } 
+  return "";
+}
+void AnalogPin::page(Print* out, String param) {
+  out->print(this->name());
+  out->print("Pin: ");
+  out->print(this->pin);
+  out->print(" Value: ");
+  out->print(this->value);
+  out->print(" Comment: ");
+  out->print(this->comment);
+}
+void AnalogPin::pageDetail(Print* out)  {
+  out->print("Pin: ");
+  out->print(this->pin);
+  out->print("<br />Value: ");
+  out->print(this->value);
+}
+
+
 class NxCmds : public Item { 
   public:
     void init() {}
