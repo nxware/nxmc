@@ -225,7 +225,7 @@ String AnalogPin::type() {
   return "AnalogPin";
 }
 void AnalogPin::loopActive() {
-  this->value = alalogRead(this->pin);
+  this->value = analogRead(this->pin);
 }
 String AnalogPin::val(String name) {
   if (name.equals("value")) {
