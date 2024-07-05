@@ -50,6 +50,11 @@ String Item::val(String name) {
   return "unknown";
 }
 
+
+String exec_button(String cmd, String title) {
+    return "<form action='cmd'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='hidden' text='"+cmd+"' /><input type='submit' value='"+title+"' /></form>";
+}
+
 Pin::Pin(int pin, String dir) {
   this->pin = pin;
   this->_name = String("pin" + String(pin));
@@ -111,6 +116,7 @@ String Pin::val(String name) {
   }
   return "";
 }
+
 void Pin::page(Print* out, String param) {
   out->print(this->name());
   out->print("Pin: ");
@@ -119,6 +125,13 @@ void Pin::page(Print* out, String param) {
   out->print(this->mode);
   out->print(" Value: ");
   out->print(this->value);
+  out->print(" Comment: ");
+  out->print(this->comment);
+  out->print("<div>");
+  out->print(exec_button(this->name()+" 1", "Ein"));
+  out->print(exec_button(this->name()+" 0", "Aus"));
+  out->print(exec_button(this->name()+" pulse", "Pulse"));
+  out->print("</div>");
 }
 void Pin::pageDetail(Print* out)  {
   out->print("Pin: ");
@@ -133,6 +146,11 @@ void Pin::pageDetail(Print* out)  {
   } else {
     out->print("gpio_is_high");
   }
+  out->print("<div>");
+  out->print(exec_button(this->name()+" 1", "Ein"));
+  out->print(exec_button(this->name()+" 0", "Aus"));
+  out->print(exec_button(this->name()+" pulse", "Pulse"));
+  out->print("</div>");
 }
 
 
