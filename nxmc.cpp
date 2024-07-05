@@ -62,9 +62,9 @@ bool Pin::cmd(String args[]) {
     } else if (args[1].equals("0")) {
       this->value = 1;
     } else if (args[1].equals("pulse")) {
-      this->mode = "out_pulse"
+      this->mode = "out_pulse";
     } else if (args[1].equals("tone")) {
-      this->mode = "out_tone"
+      this->mode = "out_tone";
     }
     return true;
   } else {
