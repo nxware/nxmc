@@ -108,11 +108,12 @@ String Pin::val(String name) {
   return "";
 }
 void Pin::page(Print* out, String param) {
+  out->print(this->name());
   out->print("Pin: ");
   out->print(this->pin);
-  out->print("Mode: ");
+  out->print(" Mode: ");
   out->print(this->mode);
-  out->print("Value: ");
+  out->print(" Value: ");
   out->print(this->value);
 }
 void Pin::pageDetail(Print* out)  {

@@ -131,6 +131,8 @@ void page_item(AsyncWebServerRequest *request) {
     if (item != NULL) {
         response->println("Item");
         item->pageDetail(response);
+    } else  {
+        response->println("Error: Item not found.");
     }
     request->send(response);
 }
