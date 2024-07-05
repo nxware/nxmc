@@ -34,7 +34,7 @@ class Pin : public Item {
     public:
       int pin;
       int value = -1;
-      String _name;
+      String _name = "";
       String mode;
       /**  dir="in"|"out" */
 		  Pin(int pin, String dir);
