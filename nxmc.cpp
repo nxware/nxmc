@@ -212,7 +212,9 @@ bool AnalogPin::cmd(String args[]) {
   if (this->_name.equals(args[0])) {
     if (args[1].equals("read")) {
       this->value = 1;
-    } 
+    } else if (args[1].equals("print")) {
+      this->print_serial = true;
+    }
     return true;
   } else {
     return false;
@@ -226,6 +228,9 @@ String AnalogPin::type() {
 }
 void AnalogPin::loopActive() {
   this->value = analogRead(this->pin);
+  if (this->print_serial) {
+    Serial.print(String(this->name() + ":" + String(this->value)));
+  }
 }
 String AnalogPin::val(String name) {
   if (name.equals("value")) {

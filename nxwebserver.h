@@ -6,8 +6,11 @@
 #define M_PAGES_ASYNC_H
 
 #include <Arduino.h>
+#include <ESPAsyncWebServer.h>
 
-extern void webserver_start();
+extern AsyncWebServer* webserver_start();
+
+extern String setup_button(String cmd, String title);
 
 extern String request_param(String name);
 

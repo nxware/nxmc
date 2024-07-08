@@ -355,7 +355,7 @@ void page_index_async(AsyncWebServerRequest *request) {
     request->send(response);
 }
 
-void webserver_start() {
+AsyncWebServer* webserver_start() {
     serverAsync.on("/", HTTP_GET, [](AsyncWebServerRequest *request){page_index_async(request);});
     //serverAsync.on("/bootid", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "text/plain", String(bootid));});
     serverAsync.on("/mac", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "text/plain", WiFi.macAddress());});
@@ -372,4 +372,5 @@ void webserver_start() {
     serverAsync.on("/time", HTTP_GET, [](AsyncWebServerRequest *request){ page_time_async(request); });
     serverAsync.onNotFound(notFound);
     serverAsync.begin();
+    return &serverAsync;
 }

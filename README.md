@@ -33,6 +33,10 @@ class Item:
 
 ## nxwifi.h
 
+##nxcmd
+
+ - `wifi udp`
+
 ## nxwebserver.h
 ```
 #include <nxwebserver.h>

@@ -69,6 +69,7 @@ class AnalogPin : public Item {
     public:
       int pin;
       int value = -1;
+      bool print_serial = false;
       String _name = "";
       String comment = "";
 		  AnalogPin(int pin);
