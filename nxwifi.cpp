@@ -4,6 +4,7 @@
 #ifdef ESP32
   #include <WiFi.h>
   #include <AsyncTCP.h>
+  #include "AsyncUDP.h"
   #include <HTTPClient.h>
   #include "esp_wifi.h"
   #include <ESPmDNS.h>
@@ -60,11 +61,7 @@ class NxUDP : public Item {
     void init() {}
     virtual void setup() override {}
     void sendInfo() {
-      this->send((String("nxudp ") + String(NX_NAME) + String(" ") 
-      #ifdef NX_WIFI
-      + WiFi.localIP().toString()
-      #endif
-      ));
+      this->send((String("nxudp ") + String("nxmc") + String(" ") + WiFi.localIP().toString()));
     }
     void send(String s) {
         #ifdef ESP32
