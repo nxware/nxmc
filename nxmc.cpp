@@ -55,12 +55,12 @@ String exec_button(String cmd, String title) {
     return "<form action='cmd'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='hidden' text='"+cmd+"' /><input type='submit' value='"+title+"' /></form>";
 }
 
-Pin::Pin(int pin, String dir, String* _name = NULL) {
+Pin::Pin(int pin, String dir, String* _name) {
   this->pin = pin;
   this->_name = String("pin" + String(pin));
   this->mode = dir;
   if (_name != NULL) {
-    this->_name = &_name;
+    this->_name = String(_name);
   }
 }
 bool Pin::cmd(String args[]) {
