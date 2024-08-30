@@ -95,3 +95,10 @@ void display_start(int start_delay = 0) {
 void display_clear() {
     hw_display.clearDisplay();
 }
+
+
+void display_status(String value) {
+  display_clear();
+  display_str(value,1,4,4);
+  display_display();
+}

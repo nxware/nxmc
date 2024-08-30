@@ -224,3 +224,11 @@ void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_p
     Serial.print(".");
   }
 }
+
+void wifi_mdns(String name) {
+  MDNS.begin(name);
+}
+
+void add_udp() {
+  add_item(new NxUDP());
+}

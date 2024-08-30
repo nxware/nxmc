@@ -38,7 +38,7 @@ class Pin : public Item {
       String mode;
       String comment = "";
       /**  dir="in"|"out" */
-		  Pin(int pin, String dir);
+		  Pin(int pin, String dir, String* _name = NULL);
       virtual bool cmd(String args[]);
       virtual String name();
       virtual String type();
