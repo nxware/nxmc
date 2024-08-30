@@ -60,7 +60,7 @@ Pin::Pin(int pin, String dir, String* _name) {
   this->_name = String("pin" + String(pin));
   this->mode = dir;
   if (_name != NULL) {
-    this->_name = String(_name);
+    this->_name = String(_name->c_str());
   }
 }
 bool Pin::cmd(String args[]) {
