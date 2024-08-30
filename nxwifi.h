@@ -10,4 +10,7 @@ extern boolean wlanConnect(const char* ssid, const char* password, boolean seria
 extern void wifi_ap(String ssid, String pw);
 extern void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_pw);
 
+extern void wifi_mdns(String name);
+extern void add_udp();
+
 #endif
