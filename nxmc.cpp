@@ -49,6 +49,7 @@ void Item::pageDetail(Print* out) {}
 String Item::val(String name) {
   return "unknown";
 }
+void Item::serial_print() {}
 
 
 String exec_button(String cmd, String title) {
@@ -155,6 +156,14 @@ void Pin::pageDetail(Print* out)  {
   out->print(exec_button(this->name()+" pulse", "Pulse"));
   out->print("</div>");
 }
+void Pin::serial_print() {
+  if (this->mode.equals("in")) {
+    Serial.print("?name=")
+    Serial.print(this->_name)
+    Serial.print("&value=")
+    Serial.println(this->value)
+  }
+}
 
 
 HotPin::HotPin(int pin) {
@@ -256,6 +265,12 @@ void AnalogPin::pageDetail(Print* out)  {
   out->print("<br />Value: ");
   out->print(this->value);
 }
+void AnalogPin::serial_print() {
+  Serial.print("?name=")
+  Serial.print(this->_name)
+  Serial.print("&value=")
+  Serial.println(this->value)
+}
 
 
 class NxCmds : public Item { 
@@ -287,7 +302,7 @@ class NxCmds : public Item {
 
 Item* root = new NxCmds();
 
-void items_loop() {
+void items_loop(bool serial_print) {
   if (root != NULL) {
     Item* current = root;
     while (current->__next != NULL) {

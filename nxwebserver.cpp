@@ -356,6 +356,10 @@ void page_index_async(AsyncWebServerRequest *request) {
     request->send(response);
 }
 
+String features() {
+    return "[\"nxesp\",\"nxmc\"]";
+}
+
 AsyncWebServer* webserver_start() {
     serverAsync.on("/", HTTP_GET, [](AsyncWebServerRequest *request){page_index_async(request);});
     //serverAsync.on("/bootid", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "text/plain", String(bootid));});
@@ -371,6 +375,7 @@ AsyncWebServer* webserver_start() {
     serverAsync.on("/item", HTTP_GET, [](AsyncWebServerRequest *request){ page_item(request);  });
     serverAsync.on("/val", HTTP_GET, [](AsyncWebServerRequest *request){ page_val(request);  });
     serverAsync.on("/time", HTTP_GET, [](AsyncWebServerRequest *request){ page_time_async(request); });
+    serverAsync.on("/features", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", this->features())); });
     serverAsync.onNotFound(notFound);
     serverAsync.begin();
     return &serverAsync;
