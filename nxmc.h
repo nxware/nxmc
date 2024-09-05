@@ -21,6 +21,7 @@ class Item {
       virtual void pageDetail(Print* out);
       boolean isActive();
       virtual void activate();
+      virtual void serial_print();
     protected:
       boolean active = false;
 };
@@ -46,6 +47,7 @@ class Pin : public Item {
       virtual void loopActive();
       virtual void page(Print* out, String param);
       virtual void pageDetail(Print* out);
+      virtual void serial_print();
 };
 
 class HotPin : public Item {
@@ -80,12 +82,13 @@ class AnalogPin : public Item {
       virtual void loopActive();
       virtual void page(Print* out, String param);
       virtual void pageDetail(Print* out);
+      virtual void serial_print();
 };
 
 
 extern int getMainDelay();
 extern void processCommand(String cmd);
-extern void items_loop();
+extern void items_loop(bool serial_print=false);
 extern boolean items_cmd(String args[]);
 extern Item* add_item(Item* item);
 extern Item* item_get_root();
