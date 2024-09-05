@@ -375,7 +375,7 @@ AsyncWebServer* webserver_start() {
     serverAsync.on("/item", HTTP_GET, [](AsyncWebServerRequest *request){ page_item(request);  });
     serverAsync.on("/val", HTTP_GET, [](AsyncWebServerRequest *request){ page_val(request);  });
     serverAsync.on("/time", HTTP_GET, [](AsyncWebServerRequest *request){ page_time_async(request); });
-    serverAsync.on("/features", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", features())); });
+    serverAsync.on("/features", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", features()); });
     serverAsync.onNotFound(notFound);
     serverAsync.begin();
     return &serverAsync;
