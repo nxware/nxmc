@@ -11,6 +11,7 @@ extern void wifi_ap(String ssid, String pw);
 extern void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_pw);
 
 extern void wifi_mdns(String name);
+extern void wifi_npy();
 extern void add_udp();
 
 #endif

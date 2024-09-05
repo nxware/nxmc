@@ -181,43 +181,43 @@ void page_status_async(AsyncWebServerRequest *request) {
    //response->print("BootID: ");
    //response->println(bootid);
    #ifdef NX_DISPLAY
-   response->println("Compile Option NX_DISPLAY");
+   //response->println("Compile Option NX_DISPLAY");
    #endif
    #ifdef ESP8266
-   response->println("Chip: ESP8266");
-   response->print("ChipId: ");
-   response->println(ESP.getChipId());
-   response->print("BootMode: ");
-   response->println(ESP.getBootMode());
-   response->print("FlashChipSize: ");
-   response->println(ESP.getFlashChipSize());
-   response->print("FlashChipId: ");
-   response->println(ESP.getFlashChipId());
-   response->print("Vcc: ");
-   response->println(ESP.getVcc());
-   response->print("ResetInfo: ");
-   response->println(ESP.getResetInfo());
+   //response->println("Chip: ESP8266");
+   //response->print("ChipId: ");
+   //response->println(ESP.getChipId());
+   //response->print("BootMode: ");
+   //response->println(ESP.getBootMode());
+   //response->print("FlashChipSize: ");
+   //response->println(ESP.getFlashChipSize());
+   //response->print("FlashChipId: ");
+   //response->println(ESP.getFlashChipId());
+   //response->print("Vcc: ");
+   //response->println(ESP.getVcc());
+   //response->print("ResetInfo: ");
+   //response->println(ESP.getResetInfo());
    #endif
    #ifdef ESP32
-   response->println("Chip: ESP32");
-   response->print("ChipId: ");
-   response->println((uint16_t)ESP.getEfuseMac()>>32);
+   //response->println("Chip: ESP32");
+   //response->print("ChipId: ");
+   //response->println((uint16_t)ESP.getEfuseMac()>>32);
    #endif
-   response->print("FreeHeap: ");
-   response->println(ESP.getFreeHeap());
+   //response->print("FreeHeap: ");
+   //response->println(ESP.getFreeHeap());
    //response->print("Serial Baud: ");
    //response->println(NX_BAUD);
    //response->print("NX-Delay: ");
    //response->println(getMainDelay());
    #ifdef NX_WIFI
-   response->print("Wifi Connected: ");
-   if (WiFi.isConnected())  response->println("Yes"); else response->println("No");
-   response->print("Wifi Mode: ");
-   response->println(WiFi.getMode()); // WIFI_OFF = 0, WIFI_STA = 1, WIFI_AP = 2, WIFI_AP_STA = 3, /* these two pseudo modes are experimental: */ WIFI_SHUTDOWN = 4, WIFI_RESUME = 8
-   response->print("Wifi MAC: ");
-   response->println(WiFi.macAddress());
-   response->print("Wifi RSSI: ");
-   response->println(WiFi.RSSI());
+   //response->print("Wifi Connected: ");
+   //if (WiFi.isConnected())  response->println("Yes"); else response->println("No");
+   //response->print("Wifi Mode: ");
+   //response->println(WiFi.getMode()); // WIFI_OFF = 0, WIFI_STA = 1, WIFI_AP = 2, WIFI_AP_STA = 3, /* these two pseudo modes are experimental: */ WIFI_SHUTDOWN = 4, WIFI_RESUME = 8
+   //response->print("Wifi MAC: ");
+   //response->println(WiFi.macAddress());
+   //response->print("Wifi RSSI: ");
+   //response->println(WiFi.RSSI());
    #endif
 
    /*for (int i = 0; i < 16; i++) {
@@ -234,7 +234,7 @@ void page_status_async(AsyncWebServerRequest *request) {
     response->println((int)GPC12    , 2);
     }*/
     #ifdef ESP8266
-    response->print("GPC12: ");
+    /*response->print("GPC12: ");
     response->println((int)GPC12    , 2);
     response->print("GPF12  : ");
     response->println((int)GPF12      , 2);
@@ -246,7 +246,7 @@ void page_status_async(AsyncWebServerRequest *request) {
     response->print("GPO  (GPIO_OUT R/W (Output Level)): "); // 11000000000001
     response->println((int)GPO      , 2);                    //              GPIO0
     response->print("GPOS  (GPIO_OUT_SET WO): ");
-    response->println((int)GPOS      , 2);
+    response->println((int)GPOS      , 2); */
     #endif
 
     //#define GPOC   ESP8266_REG(0x308) //GPIO_OUT_CLR WO
@@ -258,6 +258,7 @@ void page_status_async(AsyncWebServerRequest *request) {
     //#define GPIES  ESP8266_REG(0x320) //GPIO_STATUS_SET WO
     //#define GPIEC  ESP8266_REG(0x324) //GPIO_STATUS_CLR WO
 
+   response->print("ok"); 
    request->send(response);
 }
 
