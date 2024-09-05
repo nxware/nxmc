@@ -307,6 +307,9 @@ void items_loop(bool serial_print) {
     Item* current = root;
     while (current->__next != NULL) {
       current->loop();
+      if (serial_print) {
+        current->serial_print();
+      }
       current = current->__next;
     }
     current->loop();
