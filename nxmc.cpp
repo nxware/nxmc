@@ -158,10 +158,10 @@ void Pin::pageDetail(Print* out)  {
 }
 void Pin::serial_print() {
   if (this->mode.equals("in")) {
-    Serial.print("?name=")
-    Serial.print(this->_name)
-    Serial.print("&value=")
-    Serial.println(this->value)
+    Serial.print("?name=");
+    Serial.print(this->_name);
+    Serial.print("&value=");
+    Serial.println(this->value);
   }
 }
 
@@ -266,10 +266,10 @@ void AnalogPin::pageDetail(Print* out)  {
   out->print(this->value);
 }
 void AnalogPin::serial_print() {
-  Serial.print("?name=")
-  Serial.print(this->_name)
-  Serial.print("&value=")
-  Serial.println(this->value)
+  Serial.print("?name=");
+  Serial.print(this->_name);
+  Serial.print("&value=");
+  Serial.println(this->value);
 }
 
 
