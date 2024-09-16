@@ -306,7 +306,7 @@ void page_index_async(AsyncWebServerRequest *request) {
     response->println("<body>");
     response->println("<div id='main'>");
     response->print("<h1>NxESP: ");
-    response->print(nx_name()->c_str());
+    response->print(nx_name());
     response->println("</h1>");
     response->print("<h2>");
     //response->println(NX_VERSION);
