@@ -62,7 +62,7 @@ void Item::serial_print() {}
 
 
 String exec_button(String cmd, String title) {
-    return "<form action='/cmd' method='GET'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='hidden' text='"+cmd+"' /><input type='submit' value='"+title+"' /></form>";
+    return "<form action='/cmd' method='GET'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='hidden' value='"+cmd+"' /><input type='submit' value='"+title+"' /></form>";
 }
 
 Pin::Pin(int pin, String dir, String* _name) {

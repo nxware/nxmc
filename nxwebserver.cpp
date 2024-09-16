@@ -360,7 +360,7 @@ String features() {
     return "[\"nxesp\",\"nxmc\"]";
 }
 
-String page_names(AsyncWebServerRequest *request) {
+void page_names(AsyncWebServerRequest *request) {
     AsyncResponseStream *response = request->beginResponseStream("application/json");
     response->println("[");
     Item* root = item_get_root();
