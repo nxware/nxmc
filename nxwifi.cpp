@@ -239,3 +239,33 @@ void wifi_npy() {
     wget("http://10.42.0.1:7070/?type=network&scan_ip=" + WiFi.localIP());
   }
 }
+
+void wifi_list() {
+  int n = WiFi.scanNetworks(false, true);
+  if(n >= 0) {
+    Serial.println("Wifis: "+n);
+    for (int i = 0; i < n; i++) {
+      //processResponse("%d: %s, Ch:%d (%ddBm) %s\n", i+1, WiFi.SSID(i).c_str(), WiFi.channel(i), WiFi.RSSI(i), WiFi.encryptionType(i) == ENC_TYPE_NONE ? "open" : "");
+      Serial.print(WiFi.SSID(i).c_str());
+      Serial.print("   Channel: ");
+      Serial.print(WiFi.channel(i));
+      Serial.print("   RSSI: ");
+      Serial.print(WiFi.RSSI(i));
+      Serial.print("   Enc: ");
+      Serial.println(WiFi.encryptionType(i));
+    }
+    WiFi.scanDelete();
+  }
+}
+
+bool wifi_is_present(String name) {
+  int n = WiFi.scanNetworks(false, true);
+  if(n >= 0) {
+    for (int i = 0; i < n; i++) {
+      if (WiFi.SSID(i).equals(name)) {
+        return true;
+      }
+    }
+  }
+  return false;
+}

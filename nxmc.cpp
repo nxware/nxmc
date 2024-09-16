@@ -13,6 +13,15 @@ int since(int time) {
   return millis()-time;
 }
 
+String _name = "esp";
+
+void nx_init(String name) {
+  _name = name;
+}
+String nx_name() {
+  return _name;
+}
+
 //Item::Item() {}
 /** wird beim add_item aufgerufen */void Item::setup() {}
 void Item::loop() {
@@ -53,7 +62,7 @@ void Item::serial_print() {}
 
 
 String exec_button(String cmd, String title) {
-    return "<form action='cmd'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='hidden' text='"+cmd+"' /><input type='submit' value='"+title+"' /></form>";
+    return "<form action='/cmd' method='GET'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='hidden' text='"+cmd+"' /><input type='submit' value='"+title+"' /></form>";
 }
 
 Pin::Pin(int pin, String dir, String* _name) {
@@ -69,7 +78,7 @@ bool Pin::cmd(String args[]) {
     if (args[1].equals("1")) {
       this->value = 1;
     } else if (args[1].equals("0")) {
-      this->value = 1;
+      this->value = 0;
     } else if (args[1].equals("pulse")) {
       this->mode = "out_pulse";
     } else if (args[1].equals("tone")) {
@@ -160,7 +169,7 @@ void Pin::serial_print() {
   if (this->mode.equals("in")) {
     Serial.print("?name=");
     Serial.print(this->_name);
-    Serial.print("&value=");
+    Serial.print("&kind=in&value=");
     Serial.println(this->value);
   }
 }
@@ -268,7 +277,7 @@ void AnalogPin::pageDetail(Print* out)  {
 void AnalogPin::serial_print() {
   Serial.print("?name=");
   Serial.print(this->_name);
-  Serial.print("&value=");
+  Serial.print("&kind=a&value=");
   Serial.println(this->value);
 }
 

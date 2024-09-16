@@ -88,6 +88,8 @@ class AnalogPin : public Item {
 
 extern int getMainDelay();
 extern void processCommand(String cmd);
+extern void nx_init(String name);
+extern String nx_name();
 extern void items_loop(bool serial_print=false);
 extern boolean items_cmd(String args[]);
 extern Item* add_item(Item* item);

@@ -306,7 +306,7 @@ void page_index_async(AsyncWebServerRequest *request) {
     response->println("<body>");
     response->println("<div id='main'>");
     response->print("<h1>NxESP: ");
-    // response->print(getName()->c_str());
+    response->print(nx_name()->c_str());
     response->println("</h1>");
     response->print("<h2>");
     //response->println(NX_VERSION);
@@ -360,6 +360,28 @@ String features() {
     return "[\"nxesp\",\"nxmc\"]";
 }
 
+String page_names(AsyncWebServerRequest *request) {
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    response->println("[");
+    Item* root = item_get_root();
+    if (root != NULL) {
+        Item* current = root;
+        while (true) {
+            response->print("\"");
+            response->print(current->name());
+            response->print("\"");
+            current = current->__next;
+            if (current == NULL) {
+                break;
+            } else {
+                response->println(", ");
+            }
+        }  
+    }
+    response->println("]");
+    request->send(response);
+}
+
 AsyncWebServer* webserver_start() {
     serverAsync.on("/", HTTP_GET, [](AsyncWebServerRequest *request){page_index_async(request);});
     //serverAsync.on("/bootid", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "text/plain", String(bootid));});
@@ -376,6 +398,8 @@ AsyncWebServer* webserver_start() {
     serverAsync.on("/val", HTTP_GET, [](AsyncWebServerRequest *request){ page_val(request);  });
     serverAsync.on("/time", HTTP_GET, [](AsyncWebServerRequest *request){ page_time_async(request); });
     serverAsync.on("/features", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", features()); });
+    serverAsync.on("/name", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", nx_name()); });
+    serverAsync.on("/names", HTTP_GET, [](AsyncWebServerRequest *request){ page_names(request); });
     serverAsync.onNotFound(notFound);
     serverAsync.begin();
     return &serverAsync;
