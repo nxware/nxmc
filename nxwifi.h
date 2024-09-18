@@ -5,6 +5,7 @@
 #include <Arduino.h>
 
 extern void wget(String url);
+extern void wifi_commands();
 
 extern boolean wlanConnect(const char* ssid, const char* password, boolean serial_output);
 extern void wifi_ap(String ssid, String pw);
