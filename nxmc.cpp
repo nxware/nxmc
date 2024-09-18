@@ -304,6 +304,9 @@ class NxCmds : public Item {
         add_item(new Pin(args[2].toInt(), args[1]))->activate();
       } else if (args[0].equals("hotpin")) {
         add_item(new HotPin(args[1].toInt()))->activate();
+      } else if (args[0].equals("n") && args[1].equals(nx_name())) {
+        args++; args++;
+        items_cmd(args);
       }
       return false;
     }
@@ -322,6 +325,9 @@ void items_loop(bool serial_print) {
       current = current->__next;
     }
     current->loop();
+  }
+  if (serial_print) {
+    Serial.flush();
   }
 }
 
