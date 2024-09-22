@@ -51,6 +51,17 @@ String wget(String url) {
     //    #endif
 }
 
+class NxWifi;
+
+void wifi_commands() {
+  if (!item_loaded) {
+      NxWifi* item = new NxWifi();
+      item->activate();
+      add_item(item);
+      item_loaded = true;
+    }
+}
+
 boolean wlanConnect(const char* ssid, const char* password, boolean serial_output) {
     if (serial_output) {
           Serial.print("Connecting To ");Serial.println(ssid);
@@ -193,14 +204,7 @@ class NxWifi : public Item {
     }
 };
 
-void wifi_commands() {
-  if (!item_loaded) {
-      NxWifi* item = new NxWifi();
-      item->activate();
-      add_item(item);
-      item_loaded = true;
-    }
-}
+
 
 void wifi_ap(String ssid, String pw) {
     wifi_commands();
