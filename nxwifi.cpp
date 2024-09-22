@@ -19,6 +19,7 @@
 #endif
 
 #include <nxmc.h>
+#include <nxwifi.h>
 
 
 boolean item_loaded = false;
