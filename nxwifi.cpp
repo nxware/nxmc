@@ -55,7 +55,7 @@ class NxWifi;
 
 void wifi_commands() {
   if (!item_loaded) {
-      NxWifi* item = new NxWifi();
+      Item* item = new NxWifi();
       item->activate();
       add_item(item);
       item_loaded = true;
