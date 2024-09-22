@@ -51,8 +51,6 @@ String wget(String url) {
     //    #endif
 }
 
-class NxWifi;
-
 void wifi_commands() {
   if (!item_loaded) {
       Item* item = new NxWifi();
