@@ -51,7 +51,7 @@ String wget(String url) {
     //    #endif
 }
 
-class NxWifi : public Item;
+class NxWifi;
 
 void wifi_commands() {
   if (!item_loaded) {
@@ -186,46 +186,45 @@ class NxUDP : public Item {
     }
 };
 
-class NxWifi : public Item { 
-  public:
-    void init() {}
-    virtual void setup() override {}
-    void loopActive() override {
-        dnsServer.processNextRequest();
+
+void NxWifi::init() {}
+void NxWifi::setup() override {}
+void NxWifi::loopActive() override {
+    dnsServer.processNextRequest();
+}
+String NxWifi::name() override {
+    return "NxWifi";
+}
+void NxWifi::page(Print* out, String param) override {
+    out->print("NxWifi");
+}
+String NxWifi::val(String name) override {
+    if (name.equals("status")) {
+        return String(WiFi.status());
+    } else if (name.equals("localIP")) {
+        return WiFi.localIP().toString();
+    } else if (name.equals("rssi")) {
+        return String(WiFi.RSSI());
     }
-    String name() override {
-        return "NxWifi";
-    }
-    virtual void page(Print* out, String param) override {
-        out->print("NxWifi");
-    }
-    virtual String val(String name) override {
-        if (name.equals("status")) {
-            return String(WiFi.status());
-        } else if (name.equals("localIP")) {
-            return WiFi.localIP().toString();
-        } else if (name.equals("rssi")) {
-            return String(WiFi.RSSI());
-        }
-        return "";
-    }
-    virtual bool cmd(String args[]) override {
-      if (args[0].equals("wifi")) {
-        if (args[1].equals("off")) {
-            WiFi.mode(WIFI_OFF);
-            return true;
-        } else if (args[1].equals("udp")) {
-          add_item(new NxUDP())->activate();
-        } else if (args[1].equals("connect")) {
-          wlanConnect(args[2], args[3], false);
-        } else if (args[1].equals("ap")) {
-          wifi_ap(args[2], args[3], false);
-        }
+    return "";
+}
+bool NxWifi::cmd(String args[]) override {
+  if (args[0].equals("wifi")) {
+    if (args[1].equals("off")) {
+        WiFi.mode(WIFI_OFF);
         return true;
-      } 
-      return false;
+    } else if (args[1].equals("udp")) {
+      add_item(new NxUDP())->activate();
+    } else if (args[1].equals("connect")) {
+      wlanConnect(args[2], args[3], false);
+    } else if (args[1].equals("ap")) {
+      wifi_ap(args[2], args[3], false);
     }
-};
+    return true;
+  } 
+  return false;
+}
+
 
 void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_pw) {
   WiFi.mode(WIFI_AP_STA);
