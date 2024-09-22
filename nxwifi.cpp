@@ -215,7 +215,7 @@ bool NxWifi::cmd(String args[]) {
     } else if (args[1].equals("udp")) {
       add_item(new NxUDP())->activate();
     } else if (args[1].equals("connect")) {
-      wlanConnect(args[2], args[3], false);
+      wlanConnect(args[2].c_str(), args[3].c_str(), false);
     } else if (args[1].equals("ap")) {
       wifi_ap(args[2], args[3], false);
     }
