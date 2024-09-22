@@ -6,13 +6,13 @@
 
 class NxWifi : public Item { 
   public:
-    void init();
-    virtual void setup();
-    void loopActive();
-    String name();
-    virtual void page(Print* out, String param);
-    virtual String val(String name);
-    virtual bool cmd(String args[]);
+    void init() override;
+    virtual void setup() override;
+    void loopActive() override;
+    String name() override;
+    virtual void page(Print* out, String param) override;
+    virtual String val(String name) override;
+    virtual bool cmd(String args[]) override;
 };
 
 extern String wget(String url);

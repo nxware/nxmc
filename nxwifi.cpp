@@ -187,18 +187,18 @@ class NxUDP : public Item {
 };
 
 void NxWifi::init() {}
-void NxWifi::setup() override {}
+void NxWifi::setup() {}
 
-void NxWifi::loopActive() override {
+void NxWifi::loopActive() {
     dnsServer.processNextRequest();
 }
-String NxWifi::name() override {
+String NxWifi::name() {
     return "NxWifi";
 }
-void NxWifi::page(Print* out, String param) override {
+void NxWifi::page(Print* out, String param) {
     out->print("NxWifi");
 }
-String NxWifi::val(String name) override {
+String NxWifi::val(String name) {
     if (name.equals("status")) {
         return String(WiFi.status());
     } else if (name.equals("localIP")) {
@@ -208,7 +208,7 @@ String NxWifi::val(String name) override {
     }
     return "";
 }
-bool NxWifi::cmd(String args[]) override {
+bool NxWifi::cmd(String args[]) {
   if (args[0].equals("wifi")) {
     if (args[1].equals("off")) {
         WiFi.mode(WIFI_OFF);
