@@ -456,7 +456,7 @@ void processScript(String cmd, bool loop) {
   char *str;
   str = (char *)malloc(sizeof(char)*cmd.length())+2;
   strcpy(str, cmd.c_str());
-  display_status = str;
+  //display_status = str;
   String mcmd(str);
   //while(true) {
     mcmd.trim();
