@@ -313,7 +313,7 @@ class NxCmds : public Item {
         args++; args++;
         items_cmd(args);
       } else if (args[0].equals("rs485_init")) {
-        this->rs485_pin = args[1].toInt()
+        this->rs485_pin = args[1].toInt();
       } else if (args[0].equals("nack") && args[1].equals(nx_name())) {
         if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 1);
         Serial.print("ack ");
