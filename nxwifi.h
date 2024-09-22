@@ -6,7 +6,7 @@
 
 class NxWifi : public Item { 
   public:
-    void init() {}
+    void init();
     virtual void setup();
     void loopActive();
     String name();
