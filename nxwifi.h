@@ -4,6 +4,17 @@
 
 #include <Arduino.h>
 
+class NxWifi : public Item { 
+  public:
+    void init() {}
+    virtual void setup();
+    void loopActive();
+    String name();
+    virtual void page(Print* out, String param);
+    virtual String val(String name);
+    virtual bool cmd(String args[]);
+};
+
 extern String wget(String url);
 extern void wifi_commands();
 
