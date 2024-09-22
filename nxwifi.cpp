@@ -27,7 +27,7 @@ IPAddress local_IP(10,42,0,1);
 IPAddress gateway(10,42,0,1);
 IPAddress subnet(255,255,255,0);
 
-void wget(String url) {
+String wget(String url) {
     //  #ifdef NX_WIFI
     #ifdef ESP32
         HTTPClient http;
@@ -37,14 +37,16 @@ void wget(String url) {
         if (httpResponseCode > 0) { //Check the returning code
           payload = http.getString();   // Get the request response payload
         }
-        http.end();  
+        http.end();
+        return paylod;  
     #endif
     #ifdef ESP8266
         WiFiClient client;
         HTTPClient http;
         http.begin(client, url.c_str());
         int httpResponseCode = http.GET();  
-        http.end();  
+        http.end(); 
+        return ""; 
     #endif 
     //    #endif
 }
