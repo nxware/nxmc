@@ -51,6 +51,9 @@ String wget(String url) {
     //    #endif
 }
 
+void NxWifi::init() {}
+void NxWifi::setup() override {}
+
 void wifi_commands() {
   if (!item_loaded) {
       Item* item = new NxWifi();
@@ -185,8 +188,7 @@ class NxUDP : public Item {
 };
 
 
-void NxWifi::init() {}
-void NxWifi::setup() override {}
+
 void NxWifi::loopActive() override {
     dnsServer.processNextRequest();
 }
