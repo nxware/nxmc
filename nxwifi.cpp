@@ -38,7 +38,7 @@ String wget(String url) {
           payload = http.getString();   // Get the request response payload
         }
         http.end();
-        return paylod;  
+        return payload;  
     #endif
     #ifdef ESP8266
         WiFiClient client;
