@@ -249,6 +249,7 @@ void wifi_npy() {
   IPAddress ip = WiFi.localIP();
   if (ip[0] == 10 && ip[1] == 42 && ip[2] == 0) {
     wget("http://10.42.0.1:7070/?type=network&scan_ip=" + WiFi.localIP());
+    //wget("http://10.42.0.1:7070/?type=esp_up&ip=" + WiFi.localIP());
   }
 }
 

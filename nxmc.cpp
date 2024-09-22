@@ -170,7 +170,9 @@ void Pin::serial_print() {
     Serial.print("?name=");
     Serial.print(this->_name);
     Serial.print("&kind=in&value=");
-    Serial.println(this->value);
+    Serial.print(this->value);
+    Serial.print("&system=");
+    Serial.println(nx_name());
   }
 }
 
@@ -278,12 +280,15 @@ void AnalogPin::serial_print() {
   Serial.print("?name=");
   Serial.print(this->_name);
   Serial.print("&kind=a&value=");
-  Serial.println(this->value);
+  Serial.print(this->value);
+  Serial.print("&system=");
+  Serial.println(nx_name());
 }
 
 
 class NxCmds : public Item { 
   public:
+    int rs485_pin = -1;
     void init() {}
     virtual void setup() override {}
     void loopActive() override {
@@ -307,6 +312,24 @@ class NxCmds : public Item {
       } else if (args[0].equals("n") && args[1].equals(nx_name())) {
         args++; args++;
         items_cmd(args);
+      } else if (args[0].equals("rs485_init")) {
+        this->rs485_pin = args[1].toInt()
+      } else if (args[0].equals("nack") && args[1].equals(nx_name())) {
+        if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 1);
+        Serial.print("ack ");
+        Serial.println(args[2]);
+        Serial.flush();
+        args++; args++;args++;
+        items_cmd(args);
+        if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 0);
+      } else if (args[0].equals("ack")) {
+        if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 1);
+        Serial.print("ack ");
+        Serial.println(args[1]);
+        Serial.flush();
+        args++; args++;
+        items_cmd(args);
+        if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 0);
       }
       return false;
     }
@@ -428,3 +451,29 @@ void processCommand(String cmd) {
   args[0].toLowerCase();
   processCommandArray(args, cmd);
 } 
+
+void processScript(String cmd, bool loop) {
+  char *str;
+  str = (char *)malloc(sizeof(char)*cmd.length())+2;
+  strcpy(str, cmd.c_str());
+  display_status = str;
+  String mcmd(str);
+  //while(true) {
+    mcmd.trim();
+    int i = mcmd.indexOf('\n');
+    if (i == -1) {
+      processCommand(mcmd + " end");
+      //break;
+    } else if (i==0) {
+       //display_status = "i==0";
+       if (mcmd.length()>0) {
+        //processScript(mcmd.substring(i));
+       }
+    } else {
+      String c = mcmd.substring(0,i) + " end";
+      processCommand(c);
+      if (loop)items_loop();
+      processScript(mcmd.substring(i+1));
+    }
+  //}
+}
