@@ -102,7 +102,7 @@ boolean wlanConnect(const char* ssid, const char* password, boolean serial_outpu
   return false;
 }
 
-void wifi_ap(String ssid, String pw) {
+void wifi_ap(String ssid, String pw, boolean serial_output) {
     wifi_commands();
     // mehr zu special events: https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#generic-class
     #ifdef ESP32
