@@ -51,6 +51,67 @@ String wget(String url) {
     //    #endif
 }
 
+class NxUDP : public Item { 
+ public:
+    String nparam = "";
+    String ncmd = "";
+    #ifdef ESP32
+    AsyncUDP udp;
+    #endif
+    int i = 0;
+    int m = 64;
+    void init() {}
+    virtual void setup() override {}
+    void sendInfo() {
+      this->send((String("nxudp ") + String("nxmc") + String(" ") + WiFi.localIP().toString()));
+    }
+    void send(String s) {
+        #ifdef ESP32
+        this->udp.broadcastTo(s.c_str(), 4242); 
+        #else
+        WiFiUDP Udp;
+        IPAddress ip(255, 255, 255, 255);
+        Udp.beginPacket(ip, 4242);
+        Udp.print(s);
+        Udp.endPacket();
+        #endif
+    }
+    void loopActive() override {
+       if (this->ncmd.equals("udp")) {
+          if (i % this->m == 0) {
+            this->sendInfo();
+          }
+          i++;
+       }
+    }
+    String name() override {
+        return "udp";
+    }
+    virtual void page(Print* out, String param) override {
+        out->print("UDP Port: 4242");
+       
+    }
+    virtual bool cmd(String args[]) override {
+      if (args[0].equals("udp")) { //
+        this->ncmd = "udp";
+        return true;
+      } else if (args[0].equals("udp_stop")) {
+        this->ncmd = "stop";
+        return true;
+      } else if (args[0].equals("udp_send")) { //
+         this->send(args[1].c_str());
+        return true;
+      } else if (args[0].equals("udp_m")) { //
+        this->m = args[1].toInt();
+        return true;
+      } 
+      if (args[0].equals("response")) {
+        this->send(String("response ") + String("nxmc") + " " + args[1]);
+      }
+      return Item::cmd(args); 
+    }
+};
+
 class NxWifi : public Item { 
   public:
     void init() {}
@@ -164,70 +225,6 @@ void wifi_ap(String ssid, String pw) {
     dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
     dnsServer.start(/*DNS_PORT*/53, "*", local_IP); // fuer ein Captive portal"
 }
-
-class NxUDP : public Item { 
- public:
-    String nparam = "";
-    String ncmd = "";
-    #ifdef ESP32
-    AsyncUDP udp;
-    #endif
-    int i = 0;
-    int m = 64;
-    void init() {}
-    virtual void setup() override {}
-    void sendInfo() {
-      this->send((String("nxudp ") + String("nxmc") + String(" ") + WiFi.localIP().toString()));
-    }
-    void send(String s) {
-        #ifdef ESP32
-        this->udp.broadcastTo(s.c_str(), 4242); 
-        #else
-        WiFiUDP Udp;
-        IPAddress ip(255, 255, 255, 255);
-        Udp.beginPacket(ip, 4242);
-        Udp.print(s);
-        Udp.endPacket();
-        #endif
-    }
-    void loopActive() override {
-       if (this->ncmd.equals("udp")) {
-          if (i % this->m == 0) {
-            this->sendInfo();
-          }
-          i++;
-       }
-    }
-    String name() override {
-        return "udp";
-    }
-    virtual void page(Print* out, String param) override {
-        out->print("UDP Port: 4242");
-       
-    }
-    virtual bool cmd(String args[]) override {
-      if (args[0].equals("udp")) { //
-        this->ncmd = "udp";
-        return true;
-      } else if (args[0].equals("udp_stop")) {
-        this->ncmd = "stop";
-        return true;
-      } else if (args[0].equals("udp_send")) { //
-         this->send(args[1].c_str());
-        return true;
-      } else if (args[0].equals("udp_m")) { //
-        this->m = args[1].toInt();
-        return true;
-      } 
-      if (args[0].equals("response")) {
-        this->send(String("response ") + String("nxmc") + " " + args[1]);
-      }
-      return Item::cmd(args); 
-    }
-};
-
-
-
 
 void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_pw) {
   WiFi.mode(WIFI_AP_STA);
