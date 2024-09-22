@@ -51,6 +51,46 @@ String wget(String url) {
     //    #endif
 }
 
+boolean wlanConnect(const char* ssid, const char* password, boolean serial_output) {
+    if (serial_output) {
+          Serial.print("Connecting To ");Serial.println(ssid);
+    }
+    wifi_commands();
+    //WL_IDLE_STATUS      = 0,
+    //WL_NO_SSID_AVAIL    = 1,
+    //WL_SCAN_COMPLETED   = 2,
+    //WL_CONNECTED        = 3,
+    //WL_CONNECT_FAILED   = 4,
+    //WL_CONNECTION_LOST  = 5,
+    //WL_DISCONNECTED     = 6
+    WiFi.mode(WIFI_STA);
+    //for(int i = 0; i < 3;i++) {
+      int wifi_status = WiFi.begin(ssid, password); // #######################################################################
+      if (wifi_status == WL_CONNECTED) {
+        if (serial_output) {
+          Serial.print("Connected To ");Serial.println(ssid);
+        }
+        return true;
+      }
+      delay(3000);
+      if (serial_output) {
+        Serial.print("Wifi Status: ");Serial.println(wifi_status);
+      }
+      for(int j = 0; j < 3;j++) {
+        int wifi_status_b = WiFi.status();
+        if (serial_output) {
+            Serial.print("Wifi Status: ");Serial.println(wifi_status_b);
+        }
+        if (wifi_status_b == WL_CONNECTED) {
+          return true;
+        }
+        delay(2000);
+      }
+      delay(300);
+    //}
+  return false;
+}
+
 class NxUDP : public Item { 
  public:
     String nparam = "";
@@ -153,7 +193,6 @@ class NxWifi : public Item {
     }
 };
 
-
 void wifi_commands() {
   if (!item_loaded) {
       NxWifi* item = new NxWifi();
@@ -161,46 +200,6 @@ void wifi_commands() {
       add_item(item);
       item_loaded = true;
     }
-}
-
-boolean wlanConnect(const char* ssid, const char* password, boolean serial_output) {
-    if (serial_output) {
-          Serial.print("Connecting To ");Serial.println(ssid);
-    }
-    wifi_commands();
-    //WL_IDLE_STATUS      = 0,
-    //WL_NO_SSID_AVAIL    = 1,
-    //WL_SCAN_COMPLETED   = 2,
-    //WL_CONNECTED        = 3,
-    //WL_CONNECT_FAILED   = 4,
-    //WL_CONNECTION_LOST  = 5,
-    //WL_DISCONNECTED     = 6
-    WiFi.mode(WIFI_STA);
-    //for(int i = 0; i < 3;i++) {
-      int wifi_status = WiFi.begin(ssid, password); // #######################################################################
-      if (wifi_status == WL_CONNECTED) {
-        if (serial_output) {
-          Serial.print("Connected To ");Serial.println(ssid);
-        }
-        return true;
-      }
-      delay(3000);
-      if (serial_output) {
-        Serial.print("Wifi Status: ");Serial.println(wifi_status);
-      }
-      for(int j = 0; j < 3;j++) {
-        int wifi_status_b = WiFi.status();
-        if (serial_output) {
-            Serial.print("Wifi Status: ");Serial.println(wifi_status_b);
-        }
-        if (wifi_status_b == WL_CONNECTED) {
-          return true;
-        }
-        delay(2000);
-      }
-      delay(300);
-    //}
-  return false;
 }
 
 void wifi_ap(String ssid, String pw) {
