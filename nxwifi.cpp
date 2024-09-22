@@ -186,7 +186,6 @@ class NxUDP : public Item {
     }
 };
 
-void NxWifi::init() {}
 void NxWifi::setup() {}
 
 void NxWifi::loopActive() {

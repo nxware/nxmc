@@ -6,7 +6,6 @@
 
 class NxWifi : public Item { 
   public:
-    void init() override;
     virtual void setup() override;
     void loopActive() override;
     String name() override;
