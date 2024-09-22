@@ -51,7 +51,7 @@ String wget(String url) {
     //    #endif
 }
 
-class NxWifi;
+class NxWifi : public Item;
 
 void wifi_commands() {
   if (!item_loaded) {
@@ -100,6 +100,29 @@ boolean wlanConnect(const char* ssid, const char* password, boolean serial_outpu
       delay(300);
     //}
   return false;
+}
+
+void wifi_ap(String ssid, String pw) {
+    wifi_commands();
+    // mehr zu special events: https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#generic-class
+    #ifdef ESP32
+    //WiFi.onStationModeGotIP([](WiFiEventStationModeGotIP ipInfo) { // As soon WiFi is connected, start NTP Client
+    //    Serial.printf("Got IP: %s\r\n", WiFi.localIP().toString().c_str());
+        //NTP.begin("pool.ntp.org", 1, true);
+        //NTP.setInterval(63);
+    //});   
+    //WiFi.onSoftAPModeStationConnected(&onStationConnected);
+    #endif
+
+    #ifdef ESP8266
+    WiFi.mode(WIFI_AP);
+    #endif
+    //uint8_t mac[WL_MAC_ADDR_LENGTH];
+    //WiFi.softAPmacAddress(mac);
+    WiFi.softAPConfig(local_IP, gateway, subnet);
+    WiFi.softAP(ssid, pw);
+    dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
+    dnsServer.start(/*DNS_PORT*/53, "*", local_IP); // fuer ein Captive portal"
 }
 
 class NxUDP : public Item { 
@@ -203,31 +226,6 @@ class NxWifi : public Item {
       return false;
     }
 };
-
-
-
-void wifi_ap(String ssid, String pw) {
-    wifi_commands();
-    // mehr zu special events: https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#generic-class
-    #ifdef ESP32
-    //WiFi.onStationModeGotIP([](WiFiEventStationModeGotIP ipInfo) { // As soon WiFi is connected, start NTP Client
-    //    Serial.printf("Got IP: %s\r\n", WiFi.localIP().toString().c_str());
-        //NTP.begin("pool.ntp.org", 1, true);
-        //NTP.setInterval(63);
-    //});   
-    //WiFi.onSoftAPModeStationConnected(&onStationConnected);
-    #endif
-
-    #ifdef ESP8266
-    WiFi.mode(WIFI_AP);
-    #endif
-    //uint8_t mac[WL_MAC_ADDR_LENGTH];
-    //WiFi.softAPmacAddress(mac);
-    WiFi.softAPConfig(local_IP, gateway, subnet);
-    WiFi.softAP(ssid, pw);
-    dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
-    dnsServer.start(/*DNS_PORT*/53, "*", local_IP); // fuer ein Captive portal"
-}
 
 void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_pw) {
   WiFi.mode(WIFI_AP_STA);
