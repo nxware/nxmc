@@ -7,10 +7,12 @@
 
 #include <Arduino.h>
 
-#ifdef RASPBERRY_PI_PICO_W
-  #include <AsyncWebServer_RP2040W.h>
-#else
+#ifdef ESP32
   #include <ESPAsyncWebServer.h>
+#elif defined(ESP8266)
+  #include <ESPAsyncWebServer.h>
+#else
+  #include <AsyncWebServer_RP2040W.h>
 #endif
 
 extern AsyncWebServer* webserver_start();
