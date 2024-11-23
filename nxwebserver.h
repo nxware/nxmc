@@ -6,7 +6,12 @@
 #define M_PAGES_ASYNC_H
 
 #include <Arduino.h>
-#include <ESPAsyncWebServer.h>
+
+#ifdef RASPBERRY_PI_PICO_W
+  #include <AsyncWebServer_RP2040W.h>
+#else
+  #include <ESPAsyncWebServer.h>
+#endif
 
 extern AsyncWebServer* webserver_start();
 
