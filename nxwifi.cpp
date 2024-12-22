@@ -64,12 +64,12 @@ void wifi_commands() {
     }
 }
 
-void wifi_configure(const char* ssid, const char* pw) {
+void wifi_configure(char* ssid, char* pw) {
   wlan_ssid = ssid;
-  wlan_password = password;
+  wlan_password = pw;
 }
 
-boolean wlanConnect(const char* ssid, const char* password, boolean serial_output) {
+boolean wlanConnect(char* ssid, char* password, boolean serial_output) {
     if (serial_output) {
           Serial.print("Connecting To ");Serial.println(ssid);
     }

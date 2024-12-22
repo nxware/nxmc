@@ -17,8 +17,8 @@ class NxWifi : public Item {
 extern String wget(String url);
 extern void wifi_commands();
 
-extern boolean wlanConnect(const char* ssid, const char* password, boolean serial_output=true);
-extern void wifi_configure(const char* ssid, const char* pw);
+extern boolean wlanConnect(char* ssid, char* password, boolean serial_output=true);
+extern void wifi_configure(char* ssid, char* pw);
 extern void wifi_ap(String ssid, String pw, boolean serial_output=true);
 extern void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_pw);
 
