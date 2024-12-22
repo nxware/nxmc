@@ -27,8 +27,8 @@ DNSServer dnsServer;
 IPAddress local_IP(10,42,0,1);
 IPAddress gateway(10,42,0,1);
 IPAddress subnet(255,255,255,0);
-char* wlan_ssid;
-char* wlan_password;
+String wlan_ssid;
+String wlan_password;
 
 String wget(String url) {
     //  #ifdef NX_WIFI
@@ -64,12 +64,12 @@ void wifi_commands() {
     }
 }
 
-void wifi_configure(char* ssid, char* pw) {
+void wifi_configure(String ssid, String pw) {
   wlan_ssid = ssid;
   wlan_password = pw;
 }
 
-boolean wlanConnect(char* ssid, char* password, boolean serial_output) {
+boolean wlanConnect(String ssid, String password, boolean serial_output) {
     if (serial_output) {
           Serial.print("Connecting To ");Serial.println(ssid);
     }
