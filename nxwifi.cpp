@@ -27,6 +27,8 @@ DNSServer dnsServer;
 IPAddress local_IP(10,42,0,1);
 IPAddress gateway(10,42,0,1);
 IPAddress subnet(255,255,255,0);
+char* wlan_ssid;
+char* wlan_password;
 
 String wget(String url) {
     //  #ifdef NX_WIFI
@@ -62,11 +64,18 @@ void wifi_commands() {
     }
 }
 
+void wifi_configure(String ssid, String pw) {
+  wlan_ssid = ssid;
+  wlan_password = password;
+}
+
 boolean wlanConnect(const char* ssid, const char* password, boolean serial_output) {
     if (serial_output) {
           Serial.print("Connecting To ");Serial.println(ssid);
     }
     wifi_commands();
+    wlan_ssid = ssid;
+    wlan_password = password;
     //WL_IDLE_STATUS      = 0,
     //WL_NO_SSID_AVAIL    = 1,
     //WL_SCAN_COMPLETED   = 2,
@@ -216,6 +225,8 @@ bool NxWifi::cmd(String args[]) {
       add_item(new NxUDP())->activate();
     } else if (args[1].equals("connect")) {
       wlanConnect(args[2].c_str(), args[3].c_str(), false);
+    } else if (args[1].equals("reconnect")) {
+      wlanConnect(wlan_ssid, wlan_password, false);
     } else if (args[1].equals("ap")) {
       wifi_ap(args[2], args[3], false);
     }
