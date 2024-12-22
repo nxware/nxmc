@@ -64,7 +64,7 @@ void wifi_commands() {
     }
 }
 
-void wifi_configure(String ssid, String pw) {
+void wifi_configure(const char* ssid, const char* pw) {
   wlan_ssid = ssid;
   wlan_password = password;
 }
