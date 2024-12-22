@@ -142,7 +142,7 @@ class NxUDP : public Item {
     AsyncUDP udp;
     #endif
     int i = 0;
-    int m = 64;
+    int m = 128;
     void init() {}
     virtual void setup() override {}
     void sendInfo() {
@@ -198,7 +198,7 @@ class NxUDP : public Item {
 void NxWifi::setup() {}
 
 void NxWifi::loopActive() {
-    dnsServer.processNextRequest();
+    //dnsServer.processNextRequest();
 }
 String NxWifi::name() {
     return "NxWifi";
