@@ -263,8 +263,9 @@ String NxWifi::val(String name) {
     }
     return "";
 }
-void cmd_nxpull(String args[]) {
+bool cmd_nxpull(String args[]) {
     add_item(new NxPull(args[1], args[2], args[3].toInt()))->activate();
+    return true;
 }
 bool NxWifi::cmd(String args[]) {
   if (args[0].equals("wifi")) {
@@ -281,7 +282,7 @@ bool NxWifi::cmd(String args[]) {
       wifi_ap(args[2], args[3], false);
     return true;
   } else if (args[0].equals("nxpull")) {
-    return this->cmd_nxpull(args)
+    return cmd_nxpull(args);
   }
   return false;
 }
