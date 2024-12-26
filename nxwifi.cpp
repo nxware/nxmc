@@ -280,7 +280,8 @@ bool NxWifi::cmd(String args[]) {
       wlanConnect(wlan_ssid, wlan_password, false);
     } else if (args[1].equals("ap")) {
       wifi_ap(args[2], args[3], false);
-    return true;
+      return true;
+    }
   } else if (args[0].equals("nxpull")) {
     return cmd_nxpull(args);
   }
