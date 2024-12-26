@@ -3,6 +3,7 @@
 
 #include <time.h> // wegen setTime
 #include <TimeLib.h> // paulstoffregen/Time
+#include <Preferences.h> // ESP8266 https://github.com/vshymanskyy/Preferences
 
 #include <nxmc.h>
 
@@ -16,7 +17,11 @@ int since(int time) {
 String _name = "esp";
 
 void nx_init(String name) {
-  _name = name;
+  preferences.begin("nx", false);
+  _name = preferences.getString("name", name);
+  //unsigned int counter = preferences.getUInt("counter", 0);
+  //preferences.putUInt("counter", counter);
+  preferences.end();
 }
 String nx_name() {
   return _name;
@@ -330,6 +335,10 @@ class NxCmds : public Item {
         args++; args++;
         items_cmd(args);
         if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 0);
+      } else if (args[0].equals("set_name")) {
+        preferences.begin("nx", false);
+        preferences.putString("name", args[1]);
+        preferences.end();
       }
       return false;
     }
