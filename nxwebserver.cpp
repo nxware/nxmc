@@ -24,6 +24,7 @@
 
 AsyncWebServer serverAsync(80);
 AsyncWebServerRequest *requestAsync = NULL;
+int last_request = 0;
 
 const char* PARAM_MESSAGE = "message";
 
@@ -109,11 +110,12 @@ void page_ips_async(AsyncWebServerRequest *request) {
 }
 
 void page_items(AsyncWebServerRequest *request) {
+    last_request = millis();
     Item* item = item_get_root();
     requestAsync = request;
     AsyncResponseStream *response = request->beginResponseStream("text/html");
     while (item != NULL) {
-        response->print("<div><div style='font-size: 120%;'>");
+        response->print("<div class=\"nxitem\"><div style='font-size: 120%;' class='item_name'>");
         response->print(item->name());
         if (item->isActive()) { response->print(" (active)"); }
         // TODO /item?name=pin26
@@ -130,6 +132,7 @@ void page_items(AsyncWebServerRequest *request) {
 }
 
 void page_item(AsyncWebServerRequest *request) {
+    last_request = millis();
     Item* item = item_get(request->getParam("name")->value());
     requestAsync = request;
     AsyncResponseStream *response = request->beginResponseStream("text/html");
@@ -143,6 +146,7 @@ void page_item(AsyncWebServerRequest *request) {
 }
 
 void page_val(AsyncWebServerRequest *request) {
+    last_request = millis();
     Item* item = item_get(request->getParam("name")->value());
     requestAsync = request;
     AsyncResponseStream *response = request->beginResponseStream("text/html");
@@ -159,6 +163,7 @@ void page_val(AsyncWebServerRequest *request) {
 
 
 void page_status_async(AsyncWebServerRequest *request) {
+    last_request = millis();
  /*request->send(200, "text/plain", 
     (String("BootID: ") + String(bootid) + String("\n") +
 #ifdef NX_DISPLAY
@@ -267,6 +272,7 @@ void page_status_async(AsyncWebServerRequest *request) {
 }
 
 void page_cmd(AsyncWebServerRequest *request) {
+    last_request = millis();
     AsyncWebParameter* redirect = request->getParam("redirect");
     if (redirect == nullptr) {
         requestAsync = request;
@@ -280,6 +286,7 @@ void page_cmd(AsyncWebServerRequest *request) {
 }
 
 void page_time_async(AsyncWebServerRequest *request) {
+    last_request = millis();
     AsyncResponseStream *response = request->beginResponseStream("text/html");
     #ifdef ESP32
     response->println("Time: ");
@@ -298,6 +305,7 @@ String setup_button(String cmd, String title) {
 }
 
 void page_index_async(AsyncWebServerRequest *request) {
+    last_request = millis();
     //request->send(200, "text/plain", NX_VERSION);
     AsyncResponseStream *response = request->beginResponseStream("text/html");
     response->println("<html>");
@@ -361,10 +369,14 @@ void page_index_async(AsyncWebServerRequest *request) {
 }
 
 String features() {
+    #ifdef ESP32
+
+    #endif
     return "[\"nxesp\",\"nxmc\"]";
 }
 
 void page_names(AsyncWebServerRequest *request) {
+    last_request = millis();
     AsyncResponseStream *response = request->beginResponseStream("application/json");
     response->println("[");
     Item* root = item_get_root();

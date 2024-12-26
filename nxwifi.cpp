@@ -111,6 +111,7 @@ boolean wlanConnect(String ssid, String password, boolean serial_output) {
   return false;
 }
 
+
 void wifi_ap(String ssid, String pw, boolean serial_output) {
     wifi_commands();
     // mehr zu special events: https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#generic-class
@@ -133,6 +134,7 @@ void wifi_ap(String ssid, String pw, boolean serial_output) {
     dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
     dnsServer.start(/*DNS_PORT*/53, "*", local_IP); // fuer ein Captive portal"
 }
+
 
 class NxUDP : public Item { 
  public:
@@ -195,6 +197,51 @@ class NxUDP : public Item {
     }
 };
 
+
+class NxPull : public Item { 
+ public:
+    String url;
+    String mode; 
+    int time;
+    int last = 0
+    NxPull(String url, String mode, int time) {
+        this->url = url;
+        this->mode = mode;
+        this->time = time;
+    }
+    void init() {}
+    void execute() {
+      if (this->mode.equals("wsleep")) {
+        processCommand("wifi reconnect");
+        delay(10);
+      }
+      processScript(wget(this->url), true);
+      if (this->mode.equals("wsleep")) {
+        processCommand("wifi off");
+      }
+    }
+    void loopActive() override {
+       if (millis() > this->last + this->time) {
+          this->last = millis();
+          this->execute();
+       }
+    }
+    String name() override {
+        return "nxpull";
+    }
+    virtual void page(Print* out, String param) override {
+        out->print("NxPull");
+       
+    }
+    virtual bool cmd(String args[]) override {
+      if (args[0].equals("nxp")) { 
+        //this->ncmd = "udp";
+        return true;
+      } 
+    }
+};
+
+
 void NxWifi::setup() {}
 
 void NxWifi::loopActive() {
@@ -216,6 +263,9 @@ String NxWifi::val(String name) {
     }
     return "";
 }
+void cmd_nxpull(String args[]) {
+    add_item(new NxPull(args[1], args[2], args[3].toInt()))->activate();
+}
 bool NxWifi::cmd(String args[]) {
   if (args[0].equals("wifi")) {
     if (args[1].equals("off")) {
@@ -229,9 +279,10 @@ bool NxWifi::cmd(String args[]) {
       wlanConnect(wlan_ssid, wlan_password, false);
     } else if (args[1].equals("ap")) {
       wifi_ap(args[2], args[3], false);
-    }
     return true;
-  } 
+  } else if (args[0].equals("nxpull")) {
+    return this->cmd_nxpull(args)
+  }
   return false;
 }
 
