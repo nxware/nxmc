@@ -375,6 +375,28 @@ String features() {
     return "[\"nxesp\",\"nxmc\"]";
 }
 
+void page_info(AsyncWebServerRequest *request) {
+    last_request = millis();
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    response->println("{");
+    response->print(" \"name": \""); 
+    response->print(nx_name());
+    response->println("\",");
+    uint8_t baseMac[6];
+    esp_err_t ret = esp_wifi_get_mac(WIFI_IF_STA, baseMac);
+    if (ret == ESP_OK) {
+        response->print(" \"mac": \""); 
+        response->printf("%02x:%02x:%02x:%02x:%02x:%02x",  baseMac[0], baseMac[1], baseMac[2], baseMac[3], baseMac[4], baseMac[5]);
+        response->println("\",");
+    } 
+    response->print(" \"features\": ");
+    response->print(features());
+    response->println(",");
+    response->print("\"success\": true");
+    response->println("}");
+    request->send(response);
+}
+
 void page_names(AsyncWebServerRequest *request) {
     last_request = millis();
     AsyncResponseStream *response = request->beginResponseStream("application/json");
@@ -416,6 +438,7 @@ AsyncWebServer* webserver_start() {
     serverAsync.on("/features", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", features()); });
     serverAsync.on("/name", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", nx_name()); });
     serverAsync.on("/names", HTTP_GET, [](AsyncWebServerRequest *request){ page_names(request); });
+    serverAsync.on("/info", HTTP_GET, [](AsyncWebServerRequest *request){ page_info(request); });
     serverAsync.onNotFound(notFound);
     serverAsync.begin();
     return &serverAsync;

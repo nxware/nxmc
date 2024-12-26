@@ -238,6 +238,7 @@ class NxPull : public Item {
         //this->ncmd = "udp";
         return true;
       } 
+      return false;
     }
 };
 
