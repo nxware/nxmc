@@ -379,7 +379,7 @@ void page_info(AsyncWebServerRequest *request) {
     last_request = millis();
     AsyncResponseStream *response = request->beginResponseStream("application/json");
     response->println("{");
-    response->print(" \"name": \""); 
+    response->print(" \"name\": \""); 
     response->print(nx_name());
     response->println("\",");
     uint8_t baseMac[6];
