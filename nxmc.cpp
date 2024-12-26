@@ -7,6 +7,10 @@
 
 #include <nxmc.h>
 
+#ifdef ESP32
+Preferences preferences;
+#endif
+
 /**
  * Liefert die vergangenen Millisekunden seit time zurueck.
  */
@@ -17,11 +21,15 @@ int since(int time) {
 String _name = "esp";
 
 void nx_init(String name) {
-  preferences.begin("nx", false);
-  _name = preferences.getString("name", name);
-  //unsigned int counter = preferences.getUInt("counter", 0);
-  //preferences.putUInt("counter", counter);
-  preferences.end();
+  #ifdef ESP32
+    preferences.begin("nx", false);
+    _name = preferences.getString("name", name);
+    //unsigned int counter = preferences.getUInt("counter", 0);
+    //preferences.putUInt("counter", counter);
+    preferences.end();
+  #else
+    _name = name
+  #endif
 }
 String nx_name() {
   return _name;
