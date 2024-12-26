@@ -8,10 +8,12 @@
   #include <ESPAsyncWebServer.h>
   #include <WiFi.h>
   #include <AsyncTCP.h>
+  #include <esp_wifi.h>
 #elif defined(ESP8266)
   #include <ESPAsyncWebServer.h>
   #include <ESP8266WiFi.h>
   #include <ESPAsyncTCP.h>
+  #include <esp_wifi.h>
 #else
   #include <AsyncWebServer_RP2040W.h>
 #endif
