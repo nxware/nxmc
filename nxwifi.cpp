@@ -203,7 +203,7 @@ class NxPull : public Item {
     String url;
     String mode; 
     int time;
-    int last = 0
+    int last = 0;
     NxPull(String url, String mode, int time) {
         this->url = url;
         this->mode = mode;
