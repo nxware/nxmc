@@ -96,5 +96,6 @@ extern boolean items_cmd(String args[]);
 extern Item* add_item(Item* item);
 extern Item* item_get_root();
 extern Item* item_get(String name);
+extern void nx_script();
 
 #endif

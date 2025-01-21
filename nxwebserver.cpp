@@ -9,6 +9,7 @@
   #include <WiFi.h>
   #include <AsyncTCP.h>
   #include <esp_wifi.h>
+  #include <Preferences.h> // ESP8266 https://github.com/vshymanskyy/Preferences
 #elif defined(ESP8266)
   #include <ESPAsyncWebServer.h>
   #include <ESP8266WiFi.h>
@@ -22,7 +23,9 @@
 
 #include "nxmc.h"
 
-
+#ifdef ESP32
+Preferences preferences;
+#endif
 
 AsyncWebServer serverAsync(80);
 AsyncWebServerRequest *requestAsync = NULL;
@@ -422,6 +425,31 @@ void page_names(AsyncWebServerRequest *request) {
     request->send(response);
 }
 
+void page_script_post(AsyncWebServerRequest *request) {
+   #ifdef ESP32
+    preferences.begin("nx", false);
+    AsyncWebParameter * j = request->getParam(0); // 1st parameter
+    preferences.putString("script", j->value());
+    preferences.end();
+  #endif
+  AsyncResponseStream *response = request->beginResponseStream("application/json");
+  response->println("{}");
+  request->send(response);
+}
+
+void page_script(AsyncWebServerRequest *request) {
+   #ifdef ESP32
+    preferences.begin("nx", false);
+    response->println(preferences.getString("script", ""));
+    preferences.end();
+    request->send(response);
+  #else
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
+    response->println("{}");
+    request->send(response);
+  #endif
+}
+
 AsyncWebServer* webserver_start() {
     serverAsync.on("/", HTTP_GET, [](AsyncWebServerRequest *request){page_index_async(request);});
     //serverAsync.on("/bootid", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "text/plain", String(bootid));});
@@ -441,6 +469,8 @@ AsyncWebServer* webserver_start() {
     serverAsync.on("/name", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", nx_name()); });
     serverAsync.on("/names", HTTP_GET, [](AsyncWebServerRequest *request){ page_names(request); });
     serverAsync.on("/info", HTTP_GET, [](AsyncWebServerRequest *request){ page_info(request); });
+    serverAsync.on("/script", HTTP_POST, [](AsyncWebServerRequest *request){ page_script_post(request); });
+    serverAsync.on("/script", HTTP_GET, [](AsyncWebServerRequest *request){ page_script(request); });
     serverAsync.onNotFound(notFound);
     serverAsync.begin();
     return &serverAsync;

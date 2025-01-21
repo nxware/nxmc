@@ -198,6 +198,41 @@ class NxUDP : public Item {
 };
 
 
+class WifiConnect : public Item { 
+ public:
+    String ssid = "";
+    String pw = "";
+    bool ifconnected = false;
+    NxPull(String ssid, String pw, bool ifconnected) {
+        this->ssid = ssid;
+        this->pw = pw;
+        this->ifconnected = ifconnected;
+    }
+    void init() {}
+    virtual void setup() override {}
+    void loopActive() override {
+        int wifi_status = WiFi.status();
+        if (wifi_status != 3 /*WL_CONNECTED*/) {
+            WiFi.mode(WIFI_STA);
+            wifi_status = WiFi.begin(this->ssid, this->pw);
+        }
+    }
+    String name() override {
+        return ssid;
+    }
+    virtual void page(Print* out, String param) override {
+        out->print("Wifi: ");
+        out->print(ssid);
+    }
+    virtual bool cmd(String args[]) override {
+      //if (args[0].equals(ssid)) { //
+      //  return true;
+      //}
+      return Item::cmd(args); 
+    }
+};
+
+
 class NxPull : public Item { 
  public:
     String url;
@@ -285,6 +320,9 @@ bool NxWifi::cmd(String args[]) {
     }
   } else if (args[0].equals("nxpull")) {
     return cmd_nxpull(args);
+  } else if (args[0].equals("wificonnect")) {
+    add_item(new WifiConnect(args[1], args[2], args[3].toInt()==1))->activate();
+    return true;
   }
   return false;
 }

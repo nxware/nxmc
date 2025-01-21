@@ -298,6 +298,39 @@ void AnalogPin::serial_print() {
   Serial.println(nx_name());
 }
 
+class PrintVal : public Item { 
+  public:
+    String item_name;
+    String val_name;
+    int interval = 100;
+    int last = 0;
+    PrintVal(String item_name, String val_name, int interval) {
+        this->item_name = ssid;
+        this->val_name = val_name;
+        this->interval = interval;
+    }
+    void init() {}
+    virtual void setup() override {}
+    void loopActive() override {
+      if (millis() > this->interval + this->last) {
+        Serial.println(String("?system="+nx_name()+"&item="+this->item_name+"&name="+this->item_name+"&val=") +  item_get(this->item_name)->val(this->val_name))));
+        this->last = millis();
+      }
+    }
+    String name() override {
+        return item_name + "_" + val_name;
+    }
+    virtual void page(Print* out, String param) override {
+        out->print("PrintVal");
+    }
+    virtual String val(String name) override {
+        return "";
+    }
+    virtual bool cmd(String args[]) override {
+      return Item::cmd(args);
+    }
+};
+
 
 class NxCmds : public Item { 
   public:
@@ -347,6 +380,9 @@ class NxCmds : public Item {
         preferences.begin("nx", false);
         preferences.putString("name", args[1]);
         preferences.end();
+      } else if (args[0].equals("print_val")) {
+        add_item(new PrintVal(args[1], args[2], args[3].toInt()))->activate();
+        return true;
       }
       return false;
     }
@@ -493,4 +529,12 @@ void processScript(String cmd, bool loop) {
       processScript(mcmd.substring(i+1));
     }
   //}
+}
+
+void nx_script() {
+  #ifdef ESP32
+    preferences.begin("nx", false);
+    processScript(preferences.getString("script", ""), true);
+    preferences.end();
+  #endif
 }
