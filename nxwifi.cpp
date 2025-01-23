@@ -203,7 +203,7 @@ class WifiConnect : public Item {
     String ssid = "";
     String pw = "";
     bool ifconnected = false;
-    NxPull(String ssid, String pw, bool ifconnected) {
+    WifiConnect(String ssid, String pw, bool ifconnected) {
         this->ssid = ssid;
         this->pw = pw;
         this->ifconnected = ifconnected;
