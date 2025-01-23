@@ -278,7 +278,7 @@ void page_status_async(AsyncWebServerRequest *request) {
 
 void page_cmd(AsyncWebServerRequest *request) {
     last_request = millis();
-    AsyncWebParameter* redirect = request->getParam("redirect");
+    const AsyncWebParameter* redirect = request->getParam("redirect");
     if (redirect == nullptr) {
         requestAsync = request;
     }
@@ -428,7 +428,7 @@ void page_names(AsyncWebServerRequest *request) {
 void page_script_post(AsyncWebServerRequest *request) {
    #ifdef ESP32
     preferences.begin("nx", false);
-    AsyncWebParameter * j = request->getParam(0); // 1st parameter
+    const AsyncWebParameter* j = request->getParam("script"); // 1st parameter
     preferences.putString("script", j->value());
     preferences.end();
   #endif
