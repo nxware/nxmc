@@ -305,7 +305,7 @@ class PrintVal : public Item {
     int interval = 100;
     int last = 0;
     PrintVal(String item_name, String val_name, int interval) {
-        this->item_name = ssid;
+        this->item_name = item_name;
         this->val_name = val_name;
         this->interval = interval;
     }
@@ -313,7 +313,11 @@ class PrintVal : public Item {
     virtual void setup() override {}
     void loopActive() override {
       if (millis() > this->interval + this->last) {
-        Serial.println(String("?system="+nx_name()+"&item="+this->item_name+"&name="+this->item_name+"&val=") +  item_get(this->item_name)->val(this->val_name))));
+        Serial.println(String(
+            "?system="+nx_name()+
+            "&item="+this->item_name+
+            "&name="+this->item_name+"&val="
+          ) +  item_get(this->item_name)->val(this->val_name));
         this->last = millis();
       }
     }

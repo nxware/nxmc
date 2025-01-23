@@ -36,7 +36,7 @@ const char* PARAM_MESSAGE = "message";
 
 String request_param(String name) {
     if (requestAsync != NULL) {
-        AsyncWebParameter* param = requestAsync->getParam(name);
+        const AsyncWebParameter* param = requestAsync->getParam(name);
         if (param != NULL) {
             return param->value();
         }
@@ -439,6 +439,7 @@ void page_script_post(AsyncWebServerRequest *request) {
 
 void page_script(AsyncWebServerRequest *request) {
    #ifdef ESP32
+    AsyncResponseStream *response = request->beginResponseStream("application/json");
     preferences.begin("nx", false);
     response->println(preferences.getString("script", ""));
     preferences.end();
