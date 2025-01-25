@@ -24,7 +24,7 @@
 #include "nxmc.h"
 
 #ifdef ESP32
-Preferences preferences;
+Preferences w_preferences;
 #endif
 
 AsyncWebServer serverAsync(80);
@@ -427,10 +427,10 @@ void page_names(AsyncWebServerRequest *request) {
 
 void page_script_post(AsyncWebServerRequest *request) {
    #ifdef ESP32
-    preferences.begin("nx", false);
+    w_preferences.begin("nx", false);
     const AsyncWebParameter* j = request->getParam("script"); // 1st parameter
-    preferences.putString("script", j->value());
-    preferences.end();
+    w_preferences.putString("script", j->value());
+    w_preferences.end();
   #endif
   AsyncResponseStream *response = request->beginResponseStream("application/json");
   response->println("{}");
@@ -440,9 +440,9 @@ void page_script_post(AsyncWebServerRequest *request) {
 void page_script(AsyncWebServerRequest *request) {
    #ifdef ESP32
     AsyncResponseStream *response = request->beginResponseStream("application/json");
-    preferences.begin("nx", false);
-    response->println(preferences.getString("script", ""));
-    preferences.end();
+    w_preferences.begin("nx", false);
+    response->println(w_preferences.getString("script", ""));
+    w_preferences.end();
     request->send(response);
   #else
     AsyncResponseStream *response = request->beginResponseStream("application/json");
