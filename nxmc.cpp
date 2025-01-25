@@ -538,7 +538,9 @@ void processScript(String cmd, bool loop) {
 void nx_script() {
   #ifdef ESP32
     preferences.begin("nx", false);
-    processScript(preferences.getString("script", ""), true);
+    if (preferences.isKey("script")) {
+      processScript(preferences.getString("script", ""), true);
+    }
     preferences.end();
   #endif
 }
