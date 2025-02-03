@@ -55,9 +55,10 @@ String wget(String url) {
 }
 
 
-void wifi_commands() {
+void wifi_commands(bool serial_output) {
   if (!item_loaded) {
-      Item* item = new NxWifi();
+      NxWifi* item = new NxWifi();
+      item->serial_output = serial_output;
       item->activate();
       add_item(item);
       item_loaded = true;

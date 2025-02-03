@@ -6,6 +6,7 @@
 
 class NxWifi : public Item { 
   public:
+    bool serial_output = false;
     virtual void setup() override;
     void loopActive() override;
     String name() override;
@@ -15,7 +16,7 @@ class NxWifi : public Item {
 };
 
 extern String wget(String url);
-extern void wifi_commands();
+extern void wifi_commands(bool serial_output);
 
 extern boolean wlanConnect(String ssid, String password, boolean serial_output=true);
 extern void wifi_configure(String ssid, String pw);

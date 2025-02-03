@@ -41,6 +41,8 @@ void display_display() {
 class NxDisplay : public Item { 
   public:
     int start_delay = 0;
+    int alert = 0;
+    String alert_str = "";
     NxDisplay(int start_delay = 0) {
         this->start_delay = start_delay;
     }
@@ -48,7 +50,10 @@ class NxDisplay : public Item {
     virtual void setup() override {}
     void loopActive() override {
         hw_display.clearDisplay();
-        if (start_delay*1000 < millis()) {
+        if (this->alert > 0) {
+            display_str
+            this->alert--;
+        } else if (start_delay*1000 < millis()) {
             Item* current = item_get_root();
             while (current->__next != NULL) {
                 current->display();
@@ -71,6 +76,11 @@ class NxDisplay : public Item {
         return "";
     }
     virtual bool cmd(String args[]) override {
+      if (args[0].equals(this->name) && args[1].equals("alert")) {
+          this->alert_str = args[2]
+          this->alert = 10;
+          return true;
+      }
       return false;
     }
 };
