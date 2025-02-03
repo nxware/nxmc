@@ -77,7 +77,7 @@ class NxDisplay : public Item {
     }
     virtual bool cmd(String args[]) override {
       if (args[0].equals(this->name) && args[1].equals("alert")) {
-          this->alert_str = args[2]
+          this->alert_str = args[2];
           this->alert = 10;
           return true;
       }
