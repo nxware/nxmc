@@ -143,7 +143,7 @@ void wifi_ap(String ssid, String pw, boolean serial_output) {
 class NxUDP : public Item { 
  public:
     String nparam = "";
-    String ncmd = "";
+    String ncmd = "udp";
     #ifdef ESP32
     AsyncUDP udp;
     #endif
@@ -152,7 +152,7 @@ class NxUDP : public Item {
     void init() {}
     virtual void setup() override {}
     void sendInfo() {
-      this->send((String("nxudp ") + String("nxmc") + String(" ") + WiFi.localIP().toString()));
+      this->send((String("nxudp ") + nx_name() + String(" ") + WiFi.localIP().toString()));
     }
     void send(String s) {
         #ifdef ESP32
@@ -349,7 +349,9 @@ void wifi_mdns(String name) {
 }
 
 void add_udp() {
-  add_item(new NxUDP());
+  Item* itm = new NxUDP();
+  itm->activate();
+  add_item(itm);
 }
 
 void wifi_npy() {
