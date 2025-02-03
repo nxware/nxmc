@@ -72,7 +72,10 @@ void wifi_configure(String ssid, String pw) {
 
 boolean wlanConnect(String ssid, String password, boolean serial_output) {
     if (serial_output) {
-          Serial.print("Connecting To ");Serial.println(ssid);
+        processCommand("rs485_start");
+        Serial.print("Connecting To ");
+        Serial.println(ssid);
+        processCommand("rs485_end");
     }
     wifi_commands(serial_output);
     wlan_ssid = ssid;
