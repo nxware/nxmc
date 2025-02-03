@@ -114,7 +114,7 @@ boolean wlanConnect(String ssid, String password, boolean serial_output) {
 
 
 void wifi_ap(String ssid, String pw, boolean serial_output) {
-    wifi_commands();
+    wifi_commands(serial_output);
     // mehr zu special events: https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#generic-class
     #ifdef ESP32
     //WiFi.onStationModeGotIP([](WiFiEventStationModeGotIP ipInfo) { // As soon WiFi is connected, start NTP Client
