@@ -52,7 +52,7 @@ class NxDisplay : public Item {
         hw_display.clearDisplay();
         if (this->alert > 0) {
             display_str
-            this->alert--;
+            this->alert = this->alert - 1;
         } else if (start_delay*1000 < millis()) {
             Item* current = item_get_root();
             while (current->__next != NULL) {
