@@ -74,7 +74,7 @@ boolean wlanConnect(String ssid, String password, boolean serial_output) {
     if (serial_output) {
           Serial.print("Connecting To ");Serial.println(ssid);
     }
-    wifi_commands();
+    wifi_commands(serial_output);
     wlan_ssid = ssid;
     wlan_password = password;
     //WL_IDLE_STATUS      = 0,
