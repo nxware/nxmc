@@ -51,7 +51,7 @@ class NxDisplay : public Item {
     void loopActive() override {
         hw_display.clearDisplay();
         if (this->alert > 0) {
-            display_str
+            display_str(this->alert_str, 1, 5, 10);
             this->alert = this->alert - 1;
         } else if (start_delay*1000 < millis()) {
             Item* current = item_get_root();
