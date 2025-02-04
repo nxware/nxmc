@@ -15,4 +15,6 @@ extern void display_str(String value, int size, int x, int y);
 
 extern void display_status(String value);
 
+extern void display_add(int size, int x, int y, String item_name, String value_name);
+
 #endif

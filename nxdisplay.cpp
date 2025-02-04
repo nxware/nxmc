@@ -38,6 +38,54 @@ void display_display() {
     hw_display.display();
 }
 
+class DisplayItem : public Item { 
+  public:
+    int size = 1;
+    int x = 0;
+    int y = 0;
+    String item_name;
+    String value_name;
+    NxDisplay(int size, int x, int y, String item_name, String value_name) {
+        this->size = size;
+        this->x = x;
+        this->y = y;
+        this->item_name = item_name;
+        this->value_name = value_name;
+    }
+    void init() {}
+    virtual void setup() override {}
+    void loopActive() override {
+        
+    }
+    void display() override {
+        String s = item_get(this->item_name)->val(this->value_name);
+        display_str(s, this->size, this->x, this->x);
+    }
+    String name() override {
+        return this->item_name + "_" + this->value_name;
+    }
+    virtual void page(Print* out, String param) override {
+        out->print("NxDisplay");
+    }
+    virtual String val(String name) override {
+        return "";
+    }
+    virtual bool cmd(String args[]) override {
+      if (args[0].equals(this->name()) && args[1].equals("alert")) {
+          this->alert_str = args[2];
+          this->alert = 10;
+          return true;
+      }
+      return false;
+    }
+};
+
+void display_add(int size, int x, int y, String item_name, String value_name) {
+  Item* itm = new DisplayItem(size, x, y, item_name, value_name);
+  itm->activate();
+  add_item(itm);
+}
+
 class NxDisplay : public Item { 
   public:
     int start_delay = 0;
@@ -67,7 +115,7 @@ class NxDisplay : public Item {
         hw_display.display();
     }
     String name() override {
-        return "NxDisplay";
+        return "nxdisplay";
     }
     virtual void page(Print* out, String param) override {
         out->print("NxDisplay");
@@ -80,6 +128,8 @@ class NxDisplay : public Item {
           this->alert_str = args[2];
           this->alert = 10;
           return true;
+      } else if (args[0].equals(this->name()) && args[1].equals("add")) {
+        display_add(args[2].toInt(), args[3].toInt(), args[4].toInt(), args[5], args[6]);
       }
       return false;
     }
@@ -105,7 +155,6 @@ void display_start(int start_delay = 0) {
 void display_clear() {
     hw_display.clearDisplay();
 }
-
 
 void display_status(String value) {
   display_clear();
