@@ -45,7 +45,7 @@ class DisplayItem : public Item {
     int y = 0;
     String item_name;
     String value_name;
-    NxDisplay(int size, int x, int y, String item_name, String value_name) {
+    DisplayItem(int size, int x, int y, String item_name, String value_name) {
         this->size = size;
         this->x = x;
         this->y = y;
