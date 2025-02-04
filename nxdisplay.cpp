@@ -125,6 +125,12 @@ class NxDisplay : public Item {
           return true;
       } else if (args[0].equals(this->name()) && args[1].equals("add")) {
         display_add(args[2].toInt(), args[3].toInt(), args[4].toInt(), args[5], args[6]);
+      } else {
+        if (args[0].equals(this->name()) {
+          if (args[1].equals("rotate")) {
+            hw_display.setRotation(args[2].toInt());
+          }
+        }
       }
       return false;
     }
@@ -132,9 +138,12 @@ class NxDisplay : public Item {
 
 
 void display_start(int start_delay = 0) {
-  NxDisplay* item = new NxDisplay(start_delay);
-  item->activate();
-  add_item(item);
+
+  if (item_get("nxdisplay")==NULL) {
+    NxDisplay* item = new NxDisplay(start_delay);
+    item->activate();
+    add_item(item);
+  }
 
   if(!hw_display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
     Serial.println(F("SSD1306 allocation failed"));
