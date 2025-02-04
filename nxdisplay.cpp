@@ -126,7 +126,7 @@ class NxDisplay : public Item {
       } else if (args[0].equals(this->name()) && args[1].equals("add")) {
         display_add(args[2].toInt(), args[3].toInt(), args[4].toInt(), args[5], args[6]);
       } else {
-        if (args[0].equals(this->name()) {
+        if (args[0].equals(this->name())) {
           if (args[1].equals("rotate")) {
             hw_display.setRotation(args[2].toInt());
           }
