@@ -433,7 +433,7 @@ void page_script_post(AsyncWebServerRequest *request) {
     w_preferences.begin("nx", false);
     int params = request->params();
     for(int i=0;i<params;i++){
-      AsyncWebParameter* p = request->getParam(i);
+      const AsyncWebParameter* p = request->getParam(i);
     }
     //const AsyncWebParameter* j = request->getParam((size_t)0); // 1st parameter
     //w_preferences.putString("script", j->value());
