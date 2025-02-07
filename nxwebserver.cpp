@@ -431,9 +431,9 @@ void page_names(AsyncWebServerRequest *request) {
 void page_script_post(AsyncWebServerRequest *request) {
    #ifdef ESP32
     w_preferences.begin("nx", false);
-    //const AsyncWebParameter* j = request->getParam("script"); // 1st parameter
-    //w_preferences.putString("script", j->value());
-    w_preferences.putString("script", "nop static set");
+    const AsyncWebParameter* j = request->getParam(0); // 1st parameter
+    w_preferences.putString("script", j->value());
+    //w_preferences.putString("script", "nop static set");
     w_preferences.end();
   #endif
   AsyncResponseStream *response = request->beginResponseStream("application/json");
