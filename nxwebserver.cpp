@@ -432,7 +432,7 @@ void page_script_post(AsyncWebServerRequest *request) {
    #ifdef ESP32
     w_preferences.begin("nx", false);
     int params = request->params();
-    for(i=0;i<params;i++){
+    for(int i=0;i<params;i++){
       AsyncWebParameter* p = request->getParam(i);
     }
     //const AsyncWebParameter* j = request->getParam((size_t)0); // 1st parameter
