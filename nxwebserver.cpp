@@ -434,10 +434,11 @@ void page_script_post(AsyncWebServerRequest *request) {
     int params = request->params();
     for(int i=0;i<params;i++){
       const AsyncWebParameter* p = request->getParam(i);
+      w_preferences.putString("script", p->value());
     }
     //const AsyncWebParameter* j = request->getParam((size_t)0); // 1st parameter
     //w_preferences.putString("script", j->value());
-    w_preferences.putString("script", "set " + String(params));
+    //w_preferences.putString("script", "set " + String(params));
     w_preferences.end();
   #endif
   AsyncResponseStream *response = request->beginResponseStream("application/json");
