@@ -397,6 +397,9 @@ void page_info(AsyncWebServerRequest *request) {
     response->print(" \"features\": ");
     response->print(features());
     response->println(",");
+    #if ESP32
+      response->println(" \"chip\": \"esp32\",");
+    #endif
     response->print("\"success\": true");
     response->println("}");
     request->send(response);
@@ -428,8 +431,9 @@ void page_names(AsyncWebServerRequest *request) {
 void page_script_post(AsyncWebServerRequest *request) {
    #ifdef ESP32
     w_preferences.begin("nx", false);
-    const AsyncWebParameter* j = request->getParam("script"); // 1st parameter
-    w_preferences.putString("script", j->value());
+    //const AsyncWebParameter* j = request->getParam("script"); // 1st parameter
+    //w_preferences.putString("script", j->value());
+    w_preferences.putString("script", "nop static set");
     w_preferences.end();
   #endif
   AsyncResponseStream *response = request->beginResponseStream("application/json");
