@@ -34,7 +34,7 @@ void nx_init(String name) {
     //preferences.putUInt("counter", counter);
     preferences.end();
   #else
-    _name = name
+    _name = name;
   #endif
 }
 String nx_name() {
@@ -114,30 +114,52 @@ String Pin::name() {
 String Pin::type() {
   return "Pin";
 }
+void Pin::setupPinMode(int mode) {
+  #ifdef NX_NATIVE
+    Serial.print("pinMode ")
+    Serial.print(this->pin)
+    Serial.print(" ")
+    Serial.print(mode)
+    Serial.println(" ;")
+  #else
+    pinMode(this->pin, mode);
+  #endif
+}
+void Pin::writeDigital(int val) {
+  #ifdef NX_NATIVE
+    Serial.print("digitalWrite ")
+    Serial.print(this->pin)
+    Serial.print(" ")
+    Serial.print(val)
+    Serial.println(" ;")
+  #else
+  digitalWrite(this->pin, val);
+  #endif
+}
 void Pin::loopActive() {
   if (this->mode.equals("init_out")) {
-    pinMode(this->pin, OUTPUT);
+    this->setupPinMode(OUTPUT);
     this->mode = "out";
   } else if (this->mode.equals("init_in")) {
-    pinMode(this->pin, INPUT);
+    this->setupPinMode(OUTPUT);
     this->mode = "in";
   }
   if (this->mode.equals("out") && this->value!=-1) {
-    digitalWrite(this->pin, this->value);
+    this->writeDigital(this->value);
   } else if (this->mode.equals("in")) {
     this->value = digitalRead(this->pin);
   } else if (this->mode.equals("out_pulse")) {
-    digitalWrite(this->pin, 1);
+    this->writeDigital(1);
     delay(1000);
-    digitalWrite(this->pin, 0);
+    this->writeDigital(0);
     this->mode = "out";
   } else if (this->mode.equals("out_tone")) {
     tone(this->pin, 440, 1000);
-    digitalWrite(this->pin, 0);
+    this->writeDigital(0);
     this->mode = "out";
   } else if (this->mode.equals("out_blink")) {
     this->value = this->value==1 ? 0 : 1;
-    digitalWrite(this->pin, this->value);
+    this->writeDigital(this->value);
   }
 }
 String Pin::val(String name) {
@@ -356,7 +378,7 @@ class NxCmds : public Item {
         out->print("NxCmds");
     }
     virtual String val(String name) override {
-        return "";
+        return "val";
     }
     virtual bool cmd(String args[]) override {
       if (args[0].equals("setTime")) {
@@ -392,11 +414,16 @@ class NxCmds : public Item {
         items_cmd(args);
         if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 0);
       } else if (args[0].equals("set_name")) {
+        #ifdef ESP32
         preferences.begin("nx", false);
         preferences.putString("name", args[1]);
         preferences.end();
+        #endif
       } else if (args[0].equals("print_val")) {
         add_item(new PrintVal(args[1], args[2], args[3].toInt()))->activate();
+        return true;
+      } else if (args[0].equals("print")) {
+        Serial.println(item_get(args[1])->val(args[2]));
         return true;
       }
       return false;

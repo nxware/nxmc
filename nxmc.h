@@ -48,6 +48,9 @@ class Pin : public Item {
       virtual void page(Print* out, String param);
       virtual void pageDetail(Print* out);
       virtual void serial_print();
+    protected:
+      void setupPinMode(int mode); 
+      void writeDigital(int val);
 };
 
 class HotPin : public Item {
