@@ -426,7 +426,7 @@ class NxCmds : public Item {
         Serial.println(item_get(args[1])->val(args[2]));
         return true;
       } else if (args[0].equals("print_page")) {
-        Serial.println(item_get(args[1])->page(&Serial, ""));
+        item_get(args[1])->page(&Serial, "");
         return true;
       }
       return false;
