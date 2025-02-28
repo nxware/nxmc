@@ -116,22 +116,22 @@ String Pin::type() {
 }
 void Pin::setupPinMode(int mode) {
   #ifdef NX_NATIVE
-    Serial.print("pinMode ")
-    Serial.print(this->pin)
-    Serial.print(" ")
-    Serial.print(mode)
-    Serial.println(" ;")
+    Serial.print("pinMode ");
+    Serial.print(this->pin);
+    Serial.print(" ");
+    Serial.print(mode);
+    Serial.println(" ;");
   #else
     pinMode(this->pin, mode);
   #endif
 }
 void Pin::writeDigital(int val) {
   #ifdef NX_NATIVE
-    Serial.print("digitalWrite ")
-    Serial.print(this->pin)
-    Serial.print(" ")
-    Serial.print(val)
-    Serial.println(" ;")
+    Serial.print("digitalWrite ");
+    Serial.print(this->pin);
+    Serial.print(" ");
+    Serial.print(val);
+    Serial.println(" ;");
   #else
   digitalWrite(this->pin, val);
   #endif
