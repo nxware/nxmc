@@ -8,7 +8,8 @@
 #include <nxmc.h>
 
 #ifdef ESP32
-Preferences preferences;
+  #include <ArduinoJson.h>
+  Preferences preferences;
 #endif
 
 /**
@@ -506,6 +507,21 @@ void processCommandArray(String args[], String cmd) {
 
 void processCommand(String cmd) {
   String args[] = {"", "", "", "", "", "", "", "", "", "", "", ""}; // 12 Elemente
+  // JSON
+  #ifdef ESP32
+    if (cmd.charAt(0)=='[') {
+      JsonDocument doc;
+      deserializeJson(doc, cmd)
+      doc.as<JsonArray>();
+      int i = 0;
+      for(JsonVariant v : array) {
+        args[i] = v.as<String>();
+        i++;
+      }  
+
+    }
+  #endif
+  
   if (cmd == NULL) {
     return;
   }

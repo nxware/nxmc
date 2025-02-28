@@ -428,6 +428,24 @@ void page_names(AsyncWebServerRequest *request) {
     request->send(response);
 }
 
+void page_name_post(AsyncWebServerRequest *request) {
+    #ifdef ESP32
+     w_preferences.begin("nx", false);
+     int params = request->params();
+     for(int i=0;i<params;i++){
+       const AsyncWebParameter* p = request->getParam(i);
+       w_preferences.putString("name", p->value());
+     }
+     //const AsyncWebParameter* j = request->getParam((size_t)0); // 1st parameter
+     //w_preferences.putString("script", j->value());
+     //w_preferences.putString("script", "set " + String(params));
+     w_preferences.end();
+   #endif
+   AsyncResponseStream *response = request->beginResponseStream("application/json");
+   response->println("{}");
+   request->send(response);
+ }
+
 void page_script_post(AsyncWebServerRequest *request) {
    #ifdef ESP32
     w_preferences.begin("nx", false);
@@ -477,6 +495,7 @@ AsyncWebServer* webserver_start() {
     serverAsync.on("/time", HTTP_GET, [](AsyncWebServerRequest *request){ page_time_async(request); });
     serverAsync.on("/features", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", features()); });
     serverAsync.on("/name", HTTP_GET, [](AsyncWebServerRequest *request){ request->send(200, "application/json", nx_name()); });
+    serverAsync.on("/name", HTTP_POST, [](AsyncWebServerRequest *request){ page_name_post(request); });
     serverAsync.on("/names", HTTP_GET, [](AsyncWebServerRequest *request){ page_names(request); });
     serverAsync.on("/info", HTTP_GET, [](AsyncWebServerRequest *request){ page_info(request); });
     serverAsync.on("/script", HTTP_POST, [](AsyncWebServerRequest *request){ page_script_post(request); });
