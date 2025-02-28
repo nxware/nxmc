@@ -3,14 +3,19 @@
 
 #include <time.h> // wegen setTime
 #include <TimeLib.h> // paulstoffregen/Time
-#include <Preferences.h> // ESP8266 https://github.com/vshymanskyy/Preferences
+
 
 #include <nxmc.h>
 
 #ifdef ESP32
+  #include <Preferences.h> // ESP8266 https://github.com/vshymanskyy/Preferences
   #include <ArduinoJson.h>
   Preferences preferences;
 #endif
+#ifdef ESP8266
+  #include <Preferences.h> // ESP8266 https://github.com/vshymanskyy/Preferences
+#endif
+
 
 /**
  * Liefert die vergangenen Millisekunden seit time zurueck.
