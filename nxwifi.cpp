@@ -164,8 +164,17 @@ class NxUDP : public Item {
     void init() {}
     virtual void setup() override {}
     void sendInfo() {
-      #ifndef NX_NATIVE
+      #ifdef NX_NATIVE
         this->send((String("nxudp ") + nx_name() + String(" TODO IP") ));
+        /*String toString(IPAddress& ip) { // IP v4 only
+          String ips;
+          ips.reserve(16);
+          ips = ip[0];  ips += ':';
+          ips += ip[1]; ips += ':';
+          ips += ip[2]; ips += ':';
+          ips += ip[3];
+          return ips;
+        }*/
       #else
         this->send((String("nxudp ") + nx_name() + String(" ") + WiFi.localIP().toString()));
       #endif
