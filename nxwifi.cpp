@@ -92,6 +92,9 @@ boolean wlanConnect(String ssid, String password, boolean serial_output) {
     //WL_CONNECT_FAILED   = 4,
     //WL_CONNECTION_LOST  = 5,
     //WL_DISCONNECTED     = 6
+    #ifdef NX_NATIVE
+    Serial.print("wlanConnect ");
+    #else
     WiFi.mode(WIFI_STA);
     //for(int i = 0; i < 3;i++) {
       int wifi_status = WiFi.begin(ssid, password); // #######################################################################
@@ -117,6 +120,7 @@ boolean wlanConnect(String ssid, String password, boolean serial_output) {
       }
       delay(300);
     //}
+    #endif
   return false;
 }
 
