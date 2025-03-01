@@ -242,8 +242,10 @@ class WifiConnect : public Item {
     void loopActive() override {
         int wifi_status = WiFi.status();
         if (wifi_status != 3 /*WL_CONNECTED*/) {
+            #ifndef NX_NATIVE
             WiFi.mode(WIFI_STA);
             wifi_status = WiFi.begin(this->ssid, this->pw);
+            #endif
         }
     }
     String name() override {
