@@ -341,7 +341,9 @@ bool cmd_nxpull(String args[]) {
 bool NxWifi::cmd(String args[]) {
   if (args[0].equals("wifi")) {
     if (args[1].equals("off")) {
+        #ifndef NX_NATIVE
         WiFi.mode(WIFI_OFF);
+        #endif
         return true;
     } else if (args[1].equals("udp")) {
       add_item(new NxUDP())->activate();
