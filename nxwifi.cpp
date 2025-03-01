@@ -142,10 +142,12 @@ void wifi_ap(String ssid, String pw, boolean serial_output) {
     #endif
     //uint8_t mac[WL_MAC_ADDR_LENGTH];
     //WiFi.softAPmacAddress(mac);
+    #ifndef NX_NATIVE
     WiFi.softAPConfig(local_IP, gateway, subnet);
     WiFi.softAP(ssid, pw);
     dnsServer.setErrorReplyCode(DNSReplyCode::NoError);
     dnsServer.start(/*DNS_PORT*/53, "*", local_IP); // fuer ein Captive portal"
+    #endif
 }
 
 
