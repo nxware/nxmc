@@ -366,6 +366,7 @@ bool NxWifi::cmd(String args[]) {
 
 
 void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_pw) {
+  #ifndef NX_NATIVE
   WiFi.mode(WIFI_AP_STA);
   WiFi.begin(other_ssid, other_pw);
   Serial.print(WiFi.softAP(ap_ssid, ap_pw/*, 1 , 0 , 8*/) ? "AP Ready" : "AP Failed");
@@ -375,6 +376,7 @@ void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_p
     delay(500);
     Serial.print(".");
   }
+  #endif
 }
 
 void wifi_mdns(String name) {
