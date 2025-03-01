@@ -324,7 +324,11 @@ String NxWifi::val(String name) {
     if (name.equals("status")) {
         return String(WiFi.status());
     } else if (name.equals("localIP")) {
-        return WiFi.localIP().toString();
+        #ifdef NX_NATIVE
+          return "TODO"
+        #else
+          return WiFi.localIP().toString();
+        #endif
     } else if (name.equals("rssi")) {
         return String(WiFi.RSSI());
     }
