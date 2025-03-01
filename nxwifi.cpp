@@ -380,7 +380,9 @@ void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String other_p
 }
 
 void wifi_mdns(String name) {
+  #ifndef NX_NATIVE
   MDNS.begin(name);
+  #endif
 }
 
 void add_udp() {
