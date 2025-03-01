@@ -10,12 +10,15 @@
   #include <ESPmDNS.h>
   #include <DNSServer.h>
 #endif
-
 #ifdef ESP8266
   #include <ESP8266HTTPClient.h>
   #include <ESP8266WiFi.h>
   #include <ESP8266mDNS.h>
   #include <DNSServer.h>
+#endif
+#ifdef NX_NATIVE
+  #include <HttpClient.h>
+  #include <WiFi.h>
 #endif
 
 #include <nxmc.h>

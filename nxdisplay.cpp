@@ -68,7 +68,10 @@ class DisplayItem : public Item {
         out->print("NxDisplay");
     }
     virtual String val(String name) override {
-        return "";
+      if (name.equals("type")) {
+        return "display_item";
+      }
+      return "";
     }
     virtual bool cmd(String args[]) override {
       return false;
