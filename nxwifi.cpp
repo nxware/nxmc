@@ -400,6 +400,7 @@ void wifi_npy() {
 }
 
 void wifi_list() {
+  #ifndef NX_NATIVE
   int n = WiFi.scanNetworks(false, true);
   if(n >= 0) {
     Serial.println("Wifis: "+n);
@@ -415,6 +416,7 @@ void wifi_list() {
     }
     WiFi.scanDelete();
   }
+  #endif
 }
 
 bool wifi_is_present(String name) {
