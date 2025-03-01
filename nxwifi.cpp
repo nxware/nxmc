@@ -325,7 +325,7 @@ String NxWifi::val(String name) {
         return String(WiFi.status());
     } else if (name.equals("localIP")) {
         #ifdef NX_NATIVE
-          return "TODO"
+          return "TODO";
         #else
           return WiFi.localIP().toString();
         #endif
@@ -412,6 +412,7 @@ void wifi_list() {
 }
 
 bool wifi_is_present(String name) {
+  #ifndef NX_NATIVE
   int n = WiFi.scanNetworks(false, true);
   if(n >= 0) {
     for (int i = 0; i < n; i++) {
@@ -420,5 +421,6 @@ bool wifi_is_present(String name) {
       }
     }
   }
+  #endif
   return false;
 }
