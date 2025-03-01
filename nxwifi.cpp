@@ -19,6 +19,7 @@
 #ifdef NX_NATIVE
   #include <HttpClient.h>
   #include <WiFi.h>
+  #include <WiFiUdp.h>
 #endif
 
 #include <nxmc.h>
@@ -163,7 +164,11 @@ class NxUDP : public Item {
     void init() {}
     virtual void setup() override {}
     void sendInfo() {
-      this->send((String("nxudp ") + nx_name() + String(" ") + WiFi.localIP().toString()));
+      #ifndef NX_NATIVE
+        this->send((String("nxudp ") + nx_name() + String(" TODO IP") ));
+      #else
+        this->send((String("nxudp ") + nx_name() + String(" ") + WiFi.localIP().toString()));
+      #endif
     }
     void send(String s) {
         #ifdef ESP32
