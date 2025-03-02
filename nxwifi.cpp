@@ -40,7 +40,9 @@ String wlan_password;
 String native_wget(String url) {
   int port = 80;
   url.remove(0, 7); // http:// len = 7
+  Serial.println(url);
   int d = url.indexOf('/');
+  Serial.println(d);
   String host = url.substring(0, d);
   if (host.indexOf(':') != -1) {
     port = host.substring(host.indexOf(':')+1).toInt();
