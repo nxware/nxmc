@@ -56,7 +56,7 @@ String native_wget(String url) {
   int err =0;
   WiFiClient c;
   HttpClient http(c);
-  err = http.get(kHostname, port, kPath);
+  err = http.get(kHostname, port, kPath.c_str());
   if (err == 0)  {
     //Serial.println("startedRequest ok");
     err = http.responseStatusCode();
