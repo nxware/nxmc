@@ -36,7 +36,73 @@ IPAddress subnet(255,255,255,0);
 String wlan_ssid;
 String wlan_password;
 
+#ifdef NX_NATIVE
+String native_wget(String url) {
+  int port = 80;
+  url.remove(0, 7); // http:// len = 7
+  int d = url.indexOf('/');
+  String host = url.substring(0, d);
+  if (host.indexOf(':') != -1) {
+    port = host.substring(host.indexOf(':')+1).toInt();
+    host.remove(host.indexOf(':'));
+  }
+  const char kHostname[] = host.c_str();
+  const char kPath[] = url.substring(d).c_str();
+  const int kNetworkTimeout = 10*1000;// Number of milliseconds to wait without receiving any data before we give up
+  const int kNetworkDelay = 500;// Number of milliseconds to wait if no data is available before trying again
+  int err =0;
+  WiFiClient c;
+  HttpClient http(c);
+  err = http.get(kHostname, port, kPath);
+  if (err == 0)  {
+    //Serial.println("startedRequest ok");
+    err = http.responseStatusCode();
+    if (err >= 0) {
+      //Serial.print("Got status code: ");
+      //Serial.println(err);
+      err = http.skipResponseHeaders();
+      if (err >= 0) {
+        int bodyLen = http.contentLength();
+        unsigned long timeoutStart = millis();
+        char c;
+        String result = "";
+        // Whilst we haven't timed out & haven't reached the end of the body
+        while ( (http.connected() || http.available()) && ((millis() - timeoutStart) < kNetworkTimeout) ){
+            if (http.available()) {
+                c = http.read();
+                //Serial.print(c);
+                result += c;
+                bodyLen--;
+                // We read something, reset the timeout counter
+                timeoutStart = millis();
+            } else {
+                // We haven't got any data, so let's pause to allow some to arrive
+                delay(kNetworkDelay);
+            }
+        }
+        return result;
+      } else {
+        Serial.print("Failed to skip response headers: ");
+        Serial.println(err);
+        return "";
+      }
+    } else {
+      Serial.print("Getting response failed: ");
+      Serial.println(err);
+      return "";
+    }
+  } else {
+    Serial.print("Connect failed: ");
+    Serial.println(err);
+    return "";
+  }
+  http.stop();
+  Serial.println("HTTP DONE");
+}
+#endif
+
 String wget(String url) {
+
     //  #ifdef NX_WIFI
     #ifdef ESP32
         HTTPClient http;
@@ -57,7 +123,9 @@ String wget(String url) {
         http.end(); 
         return ""; 
     #endif 
-    //    #endif
+    #ifdef NX_NATIVE
+        return native_wget(url);
+    #endif
 }
 
 
@@ -264,6 +332,10 @@ class WifiConnect : public Item {
 };
 
 
+/**
+ * Create:
+ *    nxpull url mode:str=[wsleep] time:int=eg(600)
+ */
 class NxPull : public Item { 
  public:
     String url;
