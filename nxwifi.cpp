@@ -46,8 +46,8 @@ String native_wget(String url) {
     port = host.substring(host.indexOf(':')+1).toInt();
     host.remove(host.indexOf(':'));
   }
-  const char kHostname[] = host.c_str();
-  const char kPath[] = url.substring(d).c_str();
+  const char* kHostname = host.c_str();
+  const char* kPath = url.substring(d).c_str();
   const int kNetworkTimeout = 10*1000;// Number of milliseconds to wait without receiving any data before we give up
   const int kNetworkDelay = 500;// Number of milliseconds to wait if no data is available before trying again
   int err =0;
