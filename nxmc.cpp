@@ -547,13 +547,12 @@ void processCommand(String cmd) {
     if (cmd.charAt(0)=='[') {
       JsonDocument doc;
       deserializeJson(doc, cmd);
-      doc.as<JsonArray>();
+      JsonArray array = doc.as<JsonArray>();
       int i = 0;
       for(JsonVariant v : array) {
         args[i] = v.as<String>();
         i++;
       }  
-
     }
   #endif
   
