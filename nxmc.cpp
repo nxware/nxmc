@@ -605,5 +605,5 @@ void nx_println(String str) {
   #ifdef NX_NATIVE
   Serial.println(str);
   #endif
-  processCommand("response " + str)
+  processCommand("response " + str);
 }
