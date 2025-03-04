@@ -600,3 +600,10 @@ void nx_script() {
     preferences.end();
   #endif
 }
+
+void nx_println(const char* str) {
+  #ifdef NX_NATIVE
+  Serial.println(str);
+  #endif
+  processCommand("response " + str)
+}

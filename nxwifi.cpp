@@ -291,7 +291,7 @@ class NxUDP : public Item {
         return true;
       } 
       if (args[0].equals("response")) {
-        this->send(String("response ") + String("nxmc") + " " + args[1]);
+        this->send(String("response ") + nx_name() + " " + args[1]);
       }
       return Item::cmd(args); 
     }
