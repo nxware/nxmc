@@ -601,7 +601,7 @@ void nx_script() {
   #endif
 }
 
-void nx_println(const char* str) {
+void nx_println(String str) {
   #ifdef NX_NATIVE
   Serial.println(str);
   #endif
