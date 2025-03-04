@@ -348,7 +348,7 @@ class NxPull : public Item {
     NxPull(String url, String mode, int time) {
         this->url = url;
         this->mode = mode;
-        this->time = time;
+        this->time = time * 1000;
     }
     void init() {}
     void execute() {
@@ -375,6 +375,12 @@ class NxPull : public Item {
        
     }
     virtual bool cmd(String args[]) override {
+      if (args[0].equals(this->name())) { 
+        if (args[0].equals("execute")) { 
+          this->execute();
+          return true;
+        }
+      }
       if (args[0].equals("nxp")) { 
         //this->ncmd = "udp";
         return true;
