@@ -546,7 +546,7 @@ void processCommand(String cmd) {
   #ifdef ESP32
     if (cmd.charAt(0)=='[') {
       JsonDocument doc;
-      deserializeJson(doc, cmd)
+      deserializeJson(doc, cmd);
       doc.as<JsonArray>();
       int i = 0;
       for(JsonVariant v : array) {
