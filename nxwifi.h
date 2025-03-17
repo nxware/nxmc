@@ -25,6 +25,7 @@ extern void wifi_ap_sta(String ap_ssid, String ap_pw, String other_ssid, String 
 
 extern void wifi_list();
 extern bool wifi_is_present(String name);
+extern bool wifi_is_connected();
 
 extern void wifi_mdns(String name);
 extern void wifi_npy();

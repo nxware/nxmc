@@ -364,6 +364,37 @@ class PrintVal : public Item {
 };
 
 
+class NxAlias : public Item { 
+  public:
+    String _name;
+    String _to_name;
+    NxAlias(String name, String to_name) {
+      this->_name = name;
+      this->_to_name = to_name;
+    }
+    void init() {}
+    virtual void setup() override {}
+    void loopActive() override {
+    }
+    String name() override {
+        return this->_name;
+    }
+    virtual void page(Print* out, String param) override {
+        out->print("NxAlias");
+    }
+    virtual String val(String name) override {
+        return item_get(this->_to_name)->val(name);
+    }
+    virtual bool cmd(String args[]) override {
+      if (args[0].equals(this->_name)) {
+        args[0] = this->_to_name;
+        return item_get(this->_to_name)->cmd(args);
+      }
+      return false;
+    }
+};
+
+
 class NxCmds : public Item { 
   public:
     int rs485_pin = -1;
@@ -380,11 +411,24 @@ class NxCmds : public Item {
     virtual String val(String name) override {
         return "val";
     }
+    bool cmd_gpio(String args[]) {
+      if (args[1].equals("init_out")) {
+        // genauer befehl   gpio init_out 1
+        add_item(new Pin(args[2].toInt(), args[1]))->activate();
+        return true;
+      } else if (args[1].equals("write")) {
+        processCommand("pin" + args[2] + " " + args[3])
+        return true;
+      }
+      return false;
+    }
     virtual bool cmd(String args[]) override {
       if (args[0].equals("setTime")) {
         setTime(args[1].toInt());
-      } else if (args[0].equals("gpio")) { // genauer befehl   gpio init_out 1
-        add_item(new Pin(args[2].toInt(), args[1]))->activate();
+      } else if (args[0].equals("gpio")) { // 
+        if (this->cmd_gpio(args)) {
+          return true;
+        }
       } else if (args[0].equals("hotpin")) {
         add_item(new HotPin(args[1].toInt()))->activate();
       } else if (args[0].equals("n") && args[1].equals(nx_name())) {
@@ -427,6 +471,9 @@ class NxCmds : public Item {
         return true;
       } else if (args[0].equals("print_page")) {
         item_get(args[1])->page(&Serial, "");
+        return true;
+      } else if (args[0].equals("alias")) {
+        add_item(new NxAlias(args[1], args[2]))->activate();
         return true;
       }
       return false;

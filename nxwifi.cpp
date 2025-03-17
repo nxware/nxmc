@@ -513,3 +513,7 @@ bool wifi_is_present(String name) {
   #endif
   return false;
 }
+
+bool wifi_is_connected() {
+  return WiFi.status() == 3 /*WL_CONNECTED*/;
+}

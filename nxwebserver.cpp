@@ -33,6 +33,8 @@ int last_request = 0;
 
 const char* PARAM_MESSAGE = "message";
 
+String feature_str = "\"nxesp\",\"nxmc\"";
+
 
 String request_param(String name) {
     if (requestAsync != NULL) {
@@ -373,11 +375,15 @@ void page_index_async(AsyncWebServerRequest *request) {
     request->send(response);
 }
 
+void ws_feature_add(String feature_name) {
+    feature_str += ", \"" + feature_name + "\"";
+}
+
 String features() {
     #ifdef ESP32
 
     #endif
-    return "[\"nxesp\",\"nxmc\"]";
+    return "[" + feature_str + "]";
 }
 
 void page_info(AsyncWebServerRequest *request) {

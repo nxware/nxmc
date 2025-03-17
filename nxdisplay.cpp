@@ -70,6 +70,14 @@ class DisplayItem : public Item {
     virtual String val(String name) override {
       if (name.equals("type")) {
         return "display_item";
+      } else if (name.equals("value")) {
+        return item_get(this->item_name)->val(this->value_name);
+      } else if (name.equals("x")) {
+        return String(this->x);
+      } else if (name.equals("y")) {
+        return String(this->y);
+      } else if (name.equals("size")) {
+        return String(this->size);
       }
       return "";
     }
