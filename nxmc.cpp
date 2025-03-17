@@ -417,7 +417,7 @@ class NxCmds : public Item {
         add_item(new Pin(args[2].toInt(), args[1]))->activate();
         return true;
       } else if (args[1].equals("write")) {
-        processCommand("pin" + args[2] + " " + args[3])
+        processCommand("pin" + args[2] + " " + args[3]);
         return true;
       }
       return false;
