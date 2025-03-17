@@ -16,7 +16,7 @@
 #endif
 
 extern AsyncWebServer* webserver_start();
-extern void ws_feature_add(String feature_name)
+extern void ws_feature_add(String feature_name);
 
 extern String setup_button(String cmd, String title);
 
