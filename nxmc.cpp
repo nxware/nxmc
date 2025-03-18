@@ -102,6 +102,9 @@ bool Pin::cmd(String args[]) {
       this->mode = "out_pulse";
     } else if (args[1].equals("tone")) {
       this->mode = "out_tone";
+    } else if (args[1].equals("pwm")) {
+      this->mode = "pwm";
+      this->value = args[2].toInt();
     }
     return true;
   } else {
@@ -160,6 +163,8 @@ void Pin::loopActive() {
   } else if (this->mode.equals("out_blink")) {
     this->value = this->value==1 ? 0 : 1;
     this->writeDigital(this->value);
+  } else if (this->mode.equals("pwm")) {
+    analogWrite(this->pin, this->value);
   }
 }
 String Pin::val(String name) {
@@ -167,6 +172,8 @@ String Pin::val(String name) {
     return String(this->mode);
   } else if (name.equals("value")) {
     return String(this->value);
+  } else if (name.equals("pin")) {
+    return String(this->pin);
   }
   return "";
 }
