@@ -93,7 +93,7 @@ extern int getMainDelay();
 extern void processCommand(String cmd);
 extern void processScript(String cmd, bool loop=false);
 extern void nx_println(String str);
-extern void nx_init(String name);
+extern void nx_init(String name, bool use_flash);
 extern String nx_name();
 extern void items_loop(bool serial_print=false);
 extern boolean items_cmd(String args[]);
