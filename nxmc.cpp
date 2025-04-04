@@ -26,13 +26,15 @@ int since(int time) {
 
 String _name = "esp";
 
-void nx_init(String name) {
+void nx_init(String name, bool use_flash) {
   #ifdef ESP32
-    preferences.begin("nx", false);
-    _name = preferences.getString("name", name);
-    //unsigned int counter = preferences.getUInt("counter", 0);
-    //preferences.putUInt("counter", counter);
-    preferences.end();
+    if (use_flash) {
+      preferences.begin("nx", false);
+      _name = preferences.getString("name", name);
+      //unsigned int counter = preferences.getUInt("counter", 0);
+      //preferences.putUInt("counter", counter);
+      preferences.end();
+    }
   #else
     _name = name;
   #endif
