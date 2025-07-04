@@ -34,6 +34,8 @@ void nx_init(String name, bool use_flash) {
       //unsigned int counter = preferences.getUInt("counter", 0);
       //preferences.putUInt("counter", counter);
       preferences.end();
+    } else {
+      _name = name;
     }
   #else
     _name = name;
