@@ -1,4 +1,6 @@
 
+#ifndef NX_NOWIFI
+
 #ifndef NXWIFI_H
 #define NXWIFI_H
 
@@ -30,5 +32,7 @@ extern bool wifi_is_connected();
 extern void wifi_mdns(String name);
 extern void wifi_npy();
 extern void add_udp();
+
+#endif
 
 #endif

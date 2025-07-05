@@ -1,4 +1,6 @@
 
+#ifndef NX_NOWIFI
+
 #include <Arduino.h>
 
 #ifdef ESP32
@@ -517,3 +519,5 @@ bool wifi_is_present(String name) {
 bool wifi_is_connected() {
   return WiFi.status() == 3 /*WL_CONNECTED*/;
 }
+
+#endif
