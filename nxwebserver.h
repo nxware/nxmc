@@ -2,6 +2,8 @@
  *  #include <nxwebserver.h>
  */
 
+#ifndef NX_NOWIFI
+
 #ifndef M_PAGES_ASYNC_H
 #define M_PAGES_ASYNC_H
 
@@ -23,5 +25,7 @@ extern String setup_button(String cmd, String title);
 extern String request_param(String name);
 
 extern void pages_response_async(const char*);
+
+#endif
 
 #endif

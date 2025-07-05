@@ -2,6 +2,7 @@
  *  https://github.com/me-no-dev/ESPAsyncWebServer
  */ 
 
+#ifndef NX_NOWIFI
 
 #include <Arduino.h>
 #ifdef ESP32
@@ -510,3 +511,5 @@ AsyncWebServer* webserver_start() {
     serverAsync.begin();
     return &serverAsync;
 }
+
+#endif
