@@ -7,7 +7,7 @@
      "PaulStoffregen/Time": "*",
      "Adafruit GFX Library": "*",
      "Adafruit BusIO": "*",
-     "https://github.com/adafruit/Adafruit_SSD1306": "*"
+     "Adafruit SSD1306": "*"
   },
   "repository":
   {
