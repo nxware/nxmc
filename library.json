@@ -5,7 +5,7 @@
   "keywords": "planet, happiness, people",
   "dependencies": {
      "PaulStoffregen/Time": "*",
-     "Adafruit GFX Library". "*"
+     "Adafruit GFX Library": "*"
   },
   "repository":
   {
