@@ -1,6 +1,6 @@
 # nxmc
 
-bibliothek für Embedded-Systeme (ESP32).
+Bibliothek für Embedded-Systeme (ESP32).
 
 ## nxmc.h
 
@@ -31,9 +31,14 @@ class Item:
       virtual void activate();
 ```
 
+ - `cmd(String args[])` - Verarbeitet einen Befehl. args[0] enthält den Namen der Komponente ab args[1] stehen Parameter
+ - `val(name)` - Liefert einen Wert zurück, z.B. bei einem Pin ob name="state" 1 oder 0 ist.
+ - `page(...)` - Schreibt eine kurze Zusammen über die Komponete in HTML
+ - `pageDetail(...)` - Schreibt den Langen zustand der Komponente, HTML-Rahm mit Body muss nicht geschrieben werden 
+
 ## nxwifi.h
 
-##nxcmd
+### nxcmd
 
  - `wifi udp`
 
