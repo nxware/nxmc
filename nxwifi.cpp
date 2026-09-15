@@ -188,6 +188,10 @@ boolean wlanConnect(String ssid, String password, boolean serial_output) {
             Serial.print("Wifi Status: ");Serial.println(wifi_status_b);
         }
         if (wifi_status_b == WL_CONNECTED) {
+          if (serial_output) {
+            Serial.print("Connected To ");Serial.println(ssid);
+            Serial.print("IP: ");Serial.println(WiFi.localIp());
+          }
           return true;
         }
         delay(2000);
