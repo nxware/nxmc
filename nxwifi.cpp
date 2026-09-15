@@ -190,7 +190,7 @@ boolean wlanConnect(String ssid, String password, boolean serial_output) {
         if (wifi_status_b == WL_CONNECTED) {
           if (serial_output) {
             Serial.print("Connected To ");Serial.println(ssid);
-            Serial.print("IP: ");Serial.println(WiFi.localIp());
+            Serial.print("IP: ");Serial.println(WiFi.localIP());
           }
           return true;
         }
