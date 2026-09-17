@@ -203,6 +203,24 @@ boolean wlanConnect(String ssid, String password, boolean serial_output) {
 }
 
 
+boolean wlanConnect2(String ssid, String password, String ssid2, String password2, boolean ap, boolean serial_output) {
+  if (wlanConnect(ssid, password, true)) {
+    return true;
+  } else {
+    if (wlanConnect(ssid2, password2, true)) {
+      return true;
+    } else {
+        if (ap) {
+          wifi_ap(W_SSID2, W_PASS2);
+          return true;
+        } else {
+          return false;
+        }
+    }
+  }
+}
+
+
 void wifi_ap(String ssid, String pw, boolean serial_output) {
     wifi_commands(serial_output);
     // mehr zu special events: https://arduino-esp8266.readthedocs.io/en/latest/esp8266wifi/generic-class.html#generic-class
@@ -280,7 +298,6 @@ class NxUDP : public Item {
     }
     virtual void page(Print* out, String param) override {
         out->print("UDP Port: 4242");
-       
     }
     virtual bool cmd(String args[]) override {
       if (args[0].equals("udp")) { //
@@ -298,6 +315,7 @@ class NxUDP : public Item {
       } 
       if (args[0].equals("response")) {
         this->send(String("response ") + nx_name() + " " + args[1]);
+        return true;
       }
       return Item::cmd(args); 
     }
