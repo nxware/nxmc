@@ -211,7 +211,7 @@ boolean wlanConnect2(String ssid, String password, String ssid2, String password
       return true;
     } else {
         if (ap) {
-          wifi_ap(W_SSID2, W_PASS2);
+          wifi_ap(ssid2, password2);
           return true;
         } else {
           return false;
