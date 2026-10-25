@@ -58,8 +58,11 @@ class Pin : public Item {
       virtual void pageDetail(Print* out);
       virtual void serial_print();
     protected:
+      /** Zuletzt geschriebener Wert; "out"/"pwm" schreiben nur bei Aenderung. */
+      int written = -1;
       void setupPinMode(int mode); 
       void writeDigital(int val);
+      void writeAnalog(int val);
 };
 
 class HotPin : public Item {
@@ -79,6 +82,14 @@ class HotPin : public Item {
       virtual void pageDetail(Print* out);
 };
 
+#ifndef NX_ANALOG_INTERVAL_MS
+#define NX_ANALOG_INTERVAL_MS 100
+#endif
+
+/**
+ * Liest einen Analog-Pin alle interval ms (nicht in jedem Loop:
+ * analogRead in jedem Durchlauf stoert auf dem ESP32 das WLAN).
+ */
 class AnalogPin : public Item {
     public:
       int pin;
@@ -86,7 +97,8 @@ class AnalogPin : public Item {
       bool print_serial = false;
       String _name = "";
       String comment = "";
-		  AnalogPin(int pin);
+      unsigned long interval = NX_ANALOG_INTERVAL_MS;
+		  AnalogPin(int pin, unsigned long interval = NX_ANALOG_INTERVAL_MS);
       virtual bool cmd(String args[]);
       virtual String name();
       virtual String type();
@@ -95,6 +107,8 @@ class AnalogPin : public Item {
       virtual void page(Print* out, String param);
       virtual void pageDetail(Print* out);
       virtual void serial_print();
+    protected:
+      unsigned long last_read = 0;
 };
 
 

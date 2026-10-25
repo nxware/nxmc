@@ -58,6 +58,9 @@ Nimmt ihn keines an, wird `response Error: Unknown CMD.<cmd>` ausgelöst.
 
 Werte (`val`): `mode`, `value`, `pin`, `comment`.
 
+In den Modi `out` und `pwm` wird nur bei einer Änderung von `value` geschrieben
+(`analogWrite` in jedem Loop stört auf dem ESP32 das WLAN).
+
 ### HotPin (`pin<nr>`)
 
 | Befehl | Beschreibung |
@@ -70,12 +73,14 @@ Werte (`val`): `mode`, `value`.
 
 | Befehl | Beschreibung |
 |---|---|
-| `pin<nr> read` | (ohne Wirkung, der Wert wird ohnehin in jedem Loop gelesen) |
-| `pin<nr> print` | Gibt den Wert ab jetzt in jedem Loop seriell aus. |
+| `pin<nr> read` | (ohne Wirkung, der Wert wird ohnehin regelmäßig gelesen) |
+| `pin<nr> print` | Gibt den Wert ab jetzt bei jedem Lesen seriell aus. |
+| `pin<nr> interval <ms>` | Leseintervall setzen (Standard 100 ms, `NX_ANALOG_INTERVAL_MS`). |
 
-Werte (`val`): `value`.
+Werte (`val`): `value`, `interval`.
 
-AnalogPins werden nur aus dem Sketch angelegt (`add_item(new AnalogPin(nr))`).
+Gelesen wird nur alle `interval` ms, `analogRead` in jedem Loop stört auf dem ESP32 das WLAN.
+AnalogPins werden nur aus dem Sketch angelegt (`add_item(new AnalogPin(nr))` bzw. `new AnalogPin(nr, intervalMs)`).
 
 ## Alle Items
 

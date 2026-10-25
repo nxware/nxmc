@@ -108,6 +108,7 @@ bool Pin::cmd(String args[]) {
       this->mode = "out_tone";
     } else if (args[1].equals("pwm")) {
       this->mode = "pwm";
+      this->written = -1; // Wechsel von digital auf PWM immer ausgeben
       this->value = args[2].toInt();
     }
     return true;
@@ -142,6 +143,11 @@ void Pin::writeDigital(int val) {
   #else
   digitalWrite(this->pin, val);
   #endif
+  this->written = val;
+}
+void Pin::writeAnalog(int val) {
+  analogWrite(this->pin, val);
+  this->written = val;
 }
 void Pin::loopActive() {
   if (this->mode.equals("init_out")) {
@@ -151,7 +157,8 @@ void Pin::loopActive() {
     this->setupPinMode(INPUT);
     this->mode = "in";
   }
-  if (this->mode.equals("out") && this->value!=-1) {
+  // nur bei Aenderung schreiben: analogWrite in jedem Loop stoert auf dem ESP32 das WLAN
+  if (this->mode.equals("out") && this->value!=-1 && this->value!=this->written) {
     this->writeDigital(this->value);
   } else if (this->mode.equals("in")) {
     this->value = digitalRead(this->pin);
@@ -167,8 +174,8 @@ void Pin::loopActive() {
   } else if (this->mode.equals("out_blink")) {
     this->value = this->value==1 ? 0 : 1;
     this->writeDigital(this->value);
-  } else if (this->mode.equals("pwm")) {
-    analogWrite(this->pin, this->value);
+  } else if (this->mode.equals("pwm") && this->value!=this->written) {
+    this->writeAnalog(this->value);
   }
 }
 String Pin::val(String name) {
@@ -282,8 +289,9 @@ void HotPin::pageDetail(Print* out)  {
 }
 
 
-AnalogPin::AnalogPin(int pin) {
+AnalogPin::AnalogPin(int pin, unsigned long interval) {
   this->pin = pin;
+  this->interval = interval;
   this->_name = String("pin" + String(pin));
 }
 bool AnalogPin::cmd(String args[]) {
@@ -292,6 +300,8 @@ bool AnalogPin::cmd(String args[]) {
       this->value = 1;
     } else if (args[1].equals("print")) {
       this->print_serial = true;
+    } else if (args[1].equals("interval")) {
+      this->interval = args[2].toInt();
     }
     return true;
   } else {
@@ -305,6 +315,10 @@ String AnalogPin::type() {
   return "AnalogPin";
 }
 void AnalogPin::loopActive() {
+  if (this->value != -1 && millis() - this->last_read < this->interval) {
+    return;
+  }
+  this->last_read = millis();
   this->value = analogRead(this->pin);
   if (this->print_serial) {
     Serial.print(String(this->name() + ":" + String(this->value)));
@@ -313,7 +327,9 @@ void AnalogPin::loopActive() {
 String AnalogPin::val(String name) {
   if (name.equals("value")) {
     return String(this->value);
-  } 
+  } else if (name.equals("interval")) {
+    return String(this->interval);
+  }
   return "";
 }
 void AnalogPin::page(Print* out, String param) {
