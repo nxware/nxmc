@@ -40,6 +40,10 @@ class Item {
  */
 extern int since(int time);
 
+#ifndef NX_BLINK_INTERVAL_MS
+#define NX_BLINK_INTERVAL_MS 500
+#endif
+
 class Pin : public Item {
     public:
       int pin;
@@ -47,6 +51,8 @@ class Pin : public Item {
       String _name = "";
       String mode;
       String comment = "";
+      /** Umschaltintervall im Modus "out_blink". */
+      unsigned long blink_interval = NX_BLINK_INTERVAL_MS;
       /**  dir="in"|"out" */
 		  Pin(int pin, String dir, String* _name = NULL);
       virtual bool cmd(String args[]);
@@ -60,6 +66,7 @@ class Pin : public Item {
     protected:
       /** Zuletzt geschriebener Wert; "out"/"pwm" schreiben nur bei Aenderung. */
       int written = -1;
+      unsigned long last_toggle = 0;
       void setupPinMode(int mode); 
       void writeDigital(int val);
       void writeAnalog(int val);

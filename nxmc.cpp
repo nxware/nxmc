@@ -98,10 +98,16 @@ Pin::Pin(int pin, String dir, String* _name) {
 }
 bool Pin::cmd(String args[]) {
   if (this->_name.equalsIgnoreCase(args[0])) {
-    if (args[1].equals("1")) {
-      this->value = 1;
-    } else if (args[1].equals("0")) {
-      this->value = 0;
+    if (args[1].equals("1") || args[1].equals("0")) {
+      this->value = args[1].toInt();
+      if (this->mode.equals("out_blink")) {
+        this->mode = "out";
+      }
+    } else if (args[1].equals("blink")) {
+      if (args[2].length() > 0) {
+        this->blink_interval = args[2].toInt();
+      }
+      this->mode = "out_blink";
     } else if (args[1].equals("pulse")) {
       this->mode = "out_pulse";
     } else if (args[1].equals("tone")) {
@@ -171,7 +177,8 @@ void Pin::loopActive() {
     tone(this->pin, 440, 1000);
     this->writeDigital(0);
     this->mode = "out";
-  } else if (this->mode.equals("out_blink")) {
+  } else if (this->mode.equals("out_blink") && millis() - this->last_toggle >= this->blink_interval) {
+    this->last_toggle = millis();
     this->value = this->value==1 ? 0 : 1;
     this->writeDigital(this->value);
   } else if (this->mode.equals("pwm") && this->value!=this->written) {
@@ -187,6 +194,8 @@ String Pin::val(String name) {
     return String(this->pin);
   } else if (name.equals("comment")) {
     return this->comment;
+  } else if (name.equals("blink_interval")) {
+    return String(this->blink_interval);
   }
   return "";
 }

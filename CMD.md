@@ -51,12 +51,13 @@ Nimmt ihn keines an, wird `response Error: Unknown CMD.<cmd>` ausgelöst.
 
 | Befehl | Beschreibung |
 |---|---|
-| `pin<nr> 1` / `pin<nr> 0` | Ausgang ein/aus. |
+| `pin<nr> 1` / `pin<nr> 0` | Ausgang ein/aus (beendet auch `blink`). |
+| `pin<nr> blink [ms]` | Blinkt, Umschalten alle `ms` (Standard 500 ms, `NX_BLINK_INTERVAL_MS`; ohne Angabe gilt das zuletzt gesetzte Intervall). |
 | `pin<nr> pulse` | Einmal 1 s HIGH, dann LOW. |
 | `pin<nr> tone` | Einmal 1 s Ton mit 440 Hz. |
 | `pin<nr> pwm <wert>` | PWM-Ausgabe mit `<wert>` (`analogWrite`). |
 
-Werte (`val`): `mode`, `value`, `pin`, `comment`.
+Werte (`val`): `mode`, `value`, `pin`, `comment`, `blink_interval`.
 
 In den Modi `out` und `pwm` wird nur bei einer Änderung von `value` geschrieben
 (`analogWrite` in jedem Loop stört auf dem ESP32 das WLAN).
