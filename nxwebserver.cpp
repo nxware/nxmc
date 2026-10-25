@@ -60,6 +60,7 @@ void notFound(AsyncWebServerRequest *request) {
 void pages_response_async(const char* str) {
     if (requestAsync != NULL) {
         requestAsync->send(200, "text/plain", str);
+        requestAsync = NULL; // nur eine Antwort pro Request
     }
 }
 
@@ -289,11 +290,12 @@ void page_cmd(AsyncWebServerRequest *request) {
         requestAsync = request;
     }
     processCommand(param_value(request, "cmd"));
-    // TODO redirect
-    requestAsync = NULL;
     if (redirect != nullptr) {
         request->redirect("http://" + WiFi.localIP().toString());
+    } else if (requestAsync != NULL) { // kein Item hat geantwortet
+        request->send(200, "text/plain", "ok");
     }
+    requestAsync = NULL;
 }
 
 void page_time_async(AsyncWebServerRequest *request) {
