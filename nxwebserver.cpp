@@ -47,6 +47,12 @@ String request_param(String name) {
     return "";
 }
 
+/** Liefert den Wert des Parameters name oder "", wenn er fehlt. */
+String param_value(AsyncWebServerRequest *request, const char* name) {
+    const AsyncWebParameter* param = request->getParam(name);
+    return param != NULL ? param->value() : "";
+}
+
 void notFound(AsyncWebServerRequest *request) {
     request->send(404, "text/plain", "Not found");
 }
@@ -141,7 +147,7 @@ void page_items(AsyncWebServerRequest *request) {
 
 void page_item(AsyncWebServerRequest *request) {
     last_request = millis();
-    Item* item = item_get(request->getParam("name")->value());
+    Item* item = item_get(param_value(request, "name"));
     requestAsync = request;
     AsyncResponseStream *response = request->beginResponseStream("text/html");
     if (item != NULL) {
@@ -155,14 +161,11 @@ void page_item(AsyncWebServerRequest *request) {
 
 void page_val(AsyncWebServerRequest *request) {
     last_request = millis();
-    Item* item = item_get(request->getParam("name")->value());
+    Item* item = item_get(param_value(request, "name"));
     requestAsync = request;
     AsyncResponseStream *response = request->beginResponseStream("text/html");
     if (item != NULL) {
-        String vname = request->getParam("value")->value();
-        response->print(item->val(vname));
-
-        
+        response->print(item->val(param_value(request, "value")));
     }
     request->send(response);
 }
@@ -285,7 +288,7 @@ void page_cmd(AsyncWebServerRequest *request) {
     if (redirect == nullptr) {
         requestAsync = request;
     }
-    processCommand(request->getParam("cmd")->value());
+    processCommand(param_value(request, "cmd"));
     // TODO redirect
     requestAsync = NULL;
     if (redirect != nullptr) {
@@ -309,7 +312,7 @@ void page_time_async(AsyncWebServerRequest *request) {
 }
 
 String setup_button(String cmd, String title) {
-    return "<form action='cmd'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='hidden' text='"+cmd+"' /><input type='submit' value='"+title+"' /></form>";
+    return "<form action='cmd'><input type='hidden' name='redirect' value='1' /><input name='cmd' type='hidden' value='"+cmd+"' /><input type='submit' value='"+title+"' /></form>";
 }
 
 void page_index_async(AsyncWebServerRequest *request) {

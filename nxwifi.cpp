@@ -400,7 +400,7 @@ class NxPull : public Item {
     }
     virtual bool cmd(String args[]) override {
       if (args[0].equals(this->name())) { 
-        if (args[0].equals("execute")) { 
+        if (args[1].equals("execute")) { 
           this->execute();
           return true;
         }
@@ -499,7 +499,7 @@ void add_udp() {
 void wifi_npy() {
   IPAddress ip = WiFi.localIP();
   if (ip[0] == 10 && ip[1] == 42 && ip[2] == 0) {
-    wget("http://10.42.0.1:7070/?type=network&scan_ip=" + WiFi.localIP());
+    wget("http://10.42.0.1:7070/?type=network&scan_ip=" + ip.toString());
     //wget("http://10.42.0.1:7070/?type=esp_up&ip=" + WiFi.localIP());
   }
 }
@@ -508,7 +508,7 @@ void wifi_list() {
   #ifndef NX_NATIVE
   int n = WiFi.scanNetworks(false, true);
   if(n >= 0) {
-    Serial.println("Wifis: "+n);
+    Serial.println("Wifis: " + String(n));
     for (int i = 0; i < n; i++) {
       //processResponse("%d: %s, Ch:%d (%ddBm) %s\n", i+1, WiFi.SSID(i).c_str(), WiFi.channel(i), WiFi.RSSI(i), WiFi.encryptionType(i) == ENC_TYPE_NONE ? "open" : "");
       Serial.print(WiFi.SSID(i).c_str());

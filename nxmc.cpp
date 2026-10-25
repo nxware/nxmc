@@ -148,7 +148,7 @@ void Pin::loopActive() {
     this->setupPinMode(OUTPUT);
     this->mode = "out";
   } else if (this->mode.equals("init_in")) {
-    this->setupPinMode(OUTPUT);
+    this->setupPinMode(INPUT);
     this->mode = "in";
   }
   if (this->mode.equals("out") && this->value!=-1) {

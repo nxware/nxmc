@@ -61,7 +61,7 @@ class DisplayItem : public Item {
         Item* item = item_get(this->item_name);
         if (item == NULL) return;
         String s = item->val(this->value_name);
-        display_str(s, this->size, this->x, this->x);
+        display_str(s, this->size, this->x, this->y);
     }
     String name() override {
         return this->item_name + "_" + this->value_name;
