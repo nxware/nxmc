@@ -58,7 +58,9 @@ class DisplayItem : public Item {
         
     }
     void display() override {
-        String s = item_get(this->item_name)->val(this->value_name);
+        Item* item = item_get(this->item_name);
+        if (item == NULL) return;
+        String s = item->val(this->value_name);
         display_str(s, this->size, this->x, this->x);
     }
     String name() override {
@@ -71,7 +73,8 @@ class DisplayItem : public Item {
       if (name.equals("type")) {
         return "display_item";
       } else if (name.equals("value")) {
-        return item_get(this->item_name)->val(this->value_name);
+        Item* item = item_get(this->item_name);
+        return item != NULL ? item->val(this->value_name) : "";
       } else if (name.equals("x")) {
         return String(this->x);
       } else if (name.equals("y")) {

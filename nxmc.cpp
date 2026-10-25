@@ -230,7 +230,8 @@ void Pin::serial_print() {
 
 
 HotPin::HotPin(int pin) {
-  this->_name = "pin" + pin;
+  this->pin = pin;
+  this->_name = String("pin" + String(pin));
 }
 bool HotPin::cmd(String args[]) {
   if (this->_name.equals(args[0])) {
@@ -352,11 +353,13 @@ class PrintVal : public Item {
     virtual void setup() override {}
     void loopActive() override {
       if (millis() > this->interval + this->last) {
+        Item* item = item_get(this->item_name);
+        if (item == NULL) return;
         Serial.println(String(
             "?system="+nx_name()+
             "&item="+this->item_name+
             "&name="+this->item_name+"&val="
-          ) +  item_get(this->item_name)->val(this->val_name));
+          ) +  item->val(this->val_name));
         this->last = millis();
       }
     }
@@ -394,12 +397,15 @@ class NxAlias : public Item {
         out->print("NxAlias");
     }
     virtual String val(String name) override {
-        return item_get(this->_to_name)->val(name);
+        Item* item = item_get(this->_to_name);
+        return item != NULL ? item->val(name) : "";
     }
     virtual bool cmd(String args[]) override {
       if (args[0].equals(this->_name)) {
+        Item* item = item_get(this->_to_name);
+        if (item == NULL) return false;
         args[0] = this->_to_name;
-        return item_get(this->_to_name)->cmd(args);
+        return item->cmd(args);
       }
       return false;
     }
@@ -434,8 +440,9 @@ class NxCmds : public Item {
       return false;
     }
     virtual bool cmd(String args[]) override {
-      if (args[0].equals("setTime")) {
+      if (args[0].equals("settime")) {
         setTime(args[1].toInt());
+        return true;
       } else if (args[0].equals("gpio")) { // 
         if (this->cmd_gpio(args)) {
           return true;
@@ -444,7 +451,7 @@ class NxCmds : public Item {
         add_item(new HotPin(args[1].toInt()))->activate();
       } else if (args[0].equals("n") && args[1].equals(nx_name())) {
         args++; args++;
-        items_cmd(args);
+        return items_cmd(args);
       } else if (args[0].equals("rs485_init")) {
         this->rs485_pin = args[1].toInt();
       } else if (args[0].equals("rs485_start") && this->rs485_pin != -1) {
@@ -478,10 +485,14 @@ class NxCmds : public Item {
         add_item(new PrintVal(args[1], args[2], args[3].toInt()))->activate();
         return true;
       } else if (args[0].equals("print")) {
-        Serial.println(item_get(args[1])->val(args[2]));
+        Item* item = item_get(args[1]);
+        if (item == NULL) return false;
+        Serial.println(item->val(args[2]));
         return true;
       } else if (args[0].equals("print_page")) {
-        item_get(args[1])->page(&Serial, "");
+        Item* item = item_get(args[1]);
+        if (item == NULL) return false;
+        item->page(&Serial, "");
         return true;
       } else if (args[0].equals("alias")) {
         add_item(new NxAlias(args[1], args[2]))->activate();
@@ -510,23 +521,46 @@ void items_loop(bool serial_print) {
   }
 }
 
-void split(String s, String res[]) {
-  //String[] res = new String[10];
-  int pos = 0;
-  int i = s.indexOf(' ');
-  while(i > -1) {
-    String c = s.substring(0, i);
-    c.trim();
-    res[pos] = c;
-    pos++;
-    s = s.substring(i);
-    if (s != NULL) {              // neu
-      s.trim();
-      i = s.indexOf(' ');
-    } else {                      // neu
-      i = -1;                     // neu
-    }                             // neu
+/**
+ * Zerlegt s an Leerzeichen (mehrfache Leerzeichen zaehlen als eins).
+ * Text in "..." bleibt ein Teil, auch mit Leerzeichen; darin steht \" fuer "
+ * und \\ fuer \. Fehlt das schliessende ", reicht der Teil bis zum Ende.
+ * Schreibt hoechstens max Teile nach res (res==NULL: nur zaehlen)
+ * und liefert die Anzahl aller Teile zurueck.
+ */
+int split(const String& s, String res[], int max) {
+  int count = 0;
+  int len = s.length();
+  int i = 0;
+  while (i < len) {
+    while (i < len && isspace(s.charAt(i))) i++;
+    if (i >= len) break;
+    String part = "";
+    bool quoted = false;
+    while (i < len && (quoted || !isspace(s.charAt(i)))) {
+      char c = s.charAt(i);
+      if (c == '"') {
+        quoted = !quoted;
+      } else if (quoted && c == '\\' && i + 1 < len
+                 && (s.charAt(i + 1) == '"' || s.charAt(i + 1) == '\\')) {
+        i++;
+        part += s.charAt(i);
+      } else {
+        part += c;
+      }
+      i++;
+    }
+    if (res != NULL && count < max) {
+      res[count] = part;
+    }
+    count++;
   }
+  return count;
+}
+
+/** Legt ein args-Array mit mindestens NX_MIN_ARGS (leeren) Elementen an. */
+String* new_args(int count) {
+  return new String[count > NX_MIN_ARGS ? count : NX_MIN_ARGS];
 }
 
 boolean items_cmd(String args[]) {
@@ -562,18 +596,12 @@ Item* item_get_root() {
 }
 
 Item* item_get(String name) {
-  Item* current = root;
-  while (current->__next != NULL) {
+  for (Item* current = root; current != NULL; current = current->__next) {
     if (current->name().equals(name)) {
       return current;
     }
-    current = current->__next;
   }
-  if (current->name().equals(name)) {
-      return current;
-  } else {
-    return NULL;
-  }
+  return NULL;
 }
 
 void processResponse(const char* str) {
@@ -585,7 +613,7 @@ void processResponse(const char* str) {
   //  Serial.println(str);
   //  #endif
   // #endif 
-  String r[2] = {"response", str};
+  String r[NX_MIN_ARGS] = {"response", str};
   items_cmd(r);
 }
 
@@ -599,53 +627,55 @@ void processCommandArray(String args[], String cmd) {
 }
 
 void processCommand(String cmd) {
-  String args[] = {"", "", "", "", "", "", "", "", "", "", "", ""}; // 12 Elemente
+  cmd.trim();
+  if (cmd.length() == 0) {
+    return;
+  }
+  String* args = NULL;
   // JSON
   #ifdef ESP32
     if (cmd.charAt(0)=='[') {
       JsonDocument doc;
-      deserializeJson(doc, cmd);
+      if (deserializeJson(doc, cmd)) {
+        processResponse(String("Error: Invalid JSON." + cmd).c_str());
+        return;
+      }
       JsonArray array = doc.as<JsonArray>();
+      args = new_args(array.size());
       int i = 0;
       for(JsonVariant v : array) {
         args[i] = v.as<String>();
         i++;
-      }  
+      }
     }
   #endif
-  
-  if (cmd == NULL) {
-    return;
+
+  if (args == NULL) {
+    int count = split(cmd, NULL, 0);
+    args = new_args(count);
+    split(cmd, args, count);
   }
-  split(cmd + " ;", args);
   args[0].toLowerCase();
   processCommandArray(args, cmd);
-} 
+  delete[] args;
+}
 
+/** Fuehrt cmd zeilenweise aus; leere Zeilen werden uebersprungen. */
 void processScript(String cmd, bool loop) {
-  char *str;
-  str = (char *)malloc(sizeof(char)*cmd.length())+2;
-  strcpy(str, cmd.c_str());
-  //display_status = str;
-  String mcmd(str);
-  //while(true) {
-    mcmd.trim();
-    int i = mcmd.indexOf('\n');
-    if (i == -1) {
-      processCommand(mcmd + " end");
-      //break;
-    } else if (i==0) {
-       //display_status = "i==0";
-       if (mcmd.length()>0) {
-        //processScript(mcmd.substring(i));
-       }
-    } else {
-      String c = mcmd.substring(0,i) + " end";
-      processCommand(c);
-      if (loop)items_loop();
-      processScript(mcmd.substring(i+1));
+  int start = 0;
+  while (start < (int)cmd.length()) {
+    int end = cmd.indexOf('\n', start);
+    if (end == -1) {
+      end = cmd.length();
     }
-  //}
+    String line = cmd.substring(start, end);
+    line.trim();
+    if (line.length() > 0) {
+      processCommand(line);
+      if (loop) items_loop();
+    }
+    start = end + 1;
+  }
 }
 
 void nx_script() {

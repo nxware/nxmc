@@ -5,6 +5,15 @@
 
 #include <Arduino.h>
 
+/**
+ * Mindestgroesse des args-Arrays, das an Item::cmd() uebergeben wird.
+ * args[0] bis args[NX_MIN_ARGS-1] existieren immer (ggf. leer),
+ * bei mehr Argumenten ist das Array entsprechend groesser.
+ */
+#ifndef NX_MIN_ARGS
+#define NX_MIN_ARGS 8
+#endif
+
 class Item {
     public:
       Item* __next = NULL;
