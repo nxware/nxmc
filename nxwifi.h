@@ -5,8 +5,9 @@
 #define NXWIFI_H
 
 #include <Arduino.h>
+#include <nxmc.h>
 
-class NxWifi : public Item { 
+class NxWifi : public Item {
   public:
     bool serial_output = false;
     virtual void setup() override;
@@ -15,6 +16,30 @@ class NxWifi : public Item {
     virtual void page(Print* out, String param) override;
     virtual String val(String name) override;
     virtual bool cmd(String args[]) override;
+};
+
+/**
+ * Haelt die Verbindung zu einem WLAN im Hintergrund aufrecht: solange keine
+ * Verbindung besteht, wird alle WIFICONNECT_RETRY_MS ein Versuch gestartet,
+ * ohne loop() zu blockieren. Ein laufender AP bleibt dabei aktiv (AP+STA),
+ * z.B. um nach einem Fallback-AP spaeter doch noch ins WLAN zu kommen.
+ * Mehrere Items wechseln sich ab (je Versuch WIFICONNECT_ATTEMPT_MS Zeit).
+ * ifconnected=true: den AP abschalten, sobald die Verbindung steht.
+ *
+ * Befehl: wificonnect ssid pw [1]
+ */
+class WifiConnect : public Item {
+  public:
+    String ssid = "";
+    String pw = "";
+    bool ifconnected = false;
+    WifiConnect(String ssid, String pw, bool ifconnected);
+    void loopActive() override;
+    String name() override;
+    virtual void page(Print* out, String param) override;
+  private:
+    unsigned long last_attempt = 0;
+    bool attempted = false;
 };
 
 extern String wget(String url);

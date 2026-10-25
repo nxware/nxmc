@@ -322,41 +322,50 @@ class NxUDP : public Item {
 };
 
 
-class WifiConnect : public Item { 
- public:
-    String ssid = "";
-    String pw = "";
-    bool ifconnected = false;
-    WifiConnect(String ssid, String pw, bool ifconnected) {
-        this->ssid = ssid;
-        this->pw = pw;
-        this->ifconnected = ifconnected;
-    }
-    void init() {}
-    virtual void setup() override {}
-    void loopActive() override {
-        int wifi_status = WiFi.status();
-        if (wifi_status != 3 /*WL_CONNECTED*/) {
-            #ifndef NX_NATIVE
-            WiFi.mode(WIFI_STA);
-            wifi_status = WiFi.begin(this->ssid, this->pw);
-            #endif
+#define WIFICONNECT_RETRY_MS 30000
+#define WIFICONNECT_ATTEMPT_MS 10000
+
+/** Letzter Verbindungsversuch aller WifiConnect-Items, damit sie sich nicht gegenseitig abbrechen. */
+static unsigned long wificonnect_last_attempt = 0;
+
+WifiConnect::WifiConnect(String ssid, String pw, bool ifconnected) {
+    this->ssid = ssid;
+    this->pw = pw;
+    this->ifconnected = ifconnected;
+}
+
+void WifiConnect::loopActive() {
+    #ifndef NX_NATIVE
+    bool ap_active = WiFi.getMode() & WIFI_AP;
+    if (wifi_is_connected()) {
+        if (this->ifconnected && ap_active) {
+            dnsServer.stop();
+            WiFi.softAPdisconnect(true);
         }
+        return;
     }
-    String name() override {
-        return ssid;
+    unsigned long now = millis();
+    bool due = !this->attempted || now - this->last_attempt >= WIFICONNECT_RETRY_MS;
+    bool other_attempt_running = wificonnect_last_attempt != 0 && now - wificonnect_last_attempt < WIFICONNECT_ATTEMPT_MS;
+    if (!due || other_attempt_running) {
+        return;
     }
-    virtual void page(Print* out, String param) override {
-        out->print("Wifi: ");
-        out->print(ssid);
-    }
-    virtual bool cmd(String args[]) override {
-      //if (args[0].equals(ssid)) { //
-      //  return true;
-      //}
-      return Item::cmd(args); 
-    }
-};
+    this->attempted = true;
+    this->last_attempt = now;
+    wificonnect_last_attempt = now;
+    WiFi.mode(ap_active ? WIFI_AP_STA : WIFI_STA);
+    WiFi.begin(this->ssid, this->pw);
+    #endif
+}
+
+String WifiConnect::name() {
+    return ssid;
+}
+
+void WifiConnect::page(Print* out, String param) {
+    out->print("Wifi: ");
+    out->print(ssid);
+}
 
 
 /**

@@ -41,6 +41,7 @@ class Item:
 ### nxcmd
 
  - `wifi udp`
+ - `wificonnect ssid pw [1]` - WLAN im Hintergrund verbinden (Item `WifiConnect`), mit `1` wird der AP danach abgeschaltet
 
 ## nxwebserver.h
 ```
