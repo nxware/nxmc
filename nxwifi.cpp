@@ -408,7 +408,7 @@ class NxPull : public Item {
        
     }
     virtual bool cmd(String args[]) override {
-      if (args[0].equals(this->name())) { 
+      if (args[0].equalsIgnoreCase(this->name())) { 
         if (args[1].equals("execute")) { 
           this->execute();
           return true;
@@ -461,10 +461,13 @@ bool NxWifi::cmd(String args[]) {
         return true;
     } else if (args[1].equals("udp")) {
       add_item(new NxUDP())->activate();
+      return true;
     } else if (args[1].equals("connect")) {
       wlanConnect(args[2].c_str(), args[3].c_str(), false);
+      return true;
     } else if (args[1].equals("reconnect")) {
       wlanConnect(wlan_ssid, wlan_password, false);
+      return true;
     } else if (args[1].equals("ap")) {
       wifi_ap(args[2], args[3], false);
       return true;

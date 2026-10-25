@@ -133,18 +133,19 @@ class NxDisplay : public Item {
         return "";
     }
     virtual bool cmd(String args[]) override {
-      if (args[0].equals(this->name()) && args[1].equals("alert")) {
-          this->alert_str = args[2];
-          this->alert = 10;
-          return true;
-      } else if (args[0].equals(this->name()) && args[1].equals("add")) {
+      if (!args[0].equalsIgnoreCase(this->name())) {
+        return false;
+      }
+      if (args[1].equals("alert")) {
+        this->alert_str = args[2];
+        this->alert = 10;
+        return true;
+      } else if (args[1].equals("add")) {
         display_add(args[2].toInt(), args[3].toInt(), args[4].toInt(), args[5], args[6]);
-      } else {
-        if (args[0].equals(this->name())) {
-          if (args[1].equals("rotate")) {
-            hw_display.setRotation(args[2].toInt());
-          }
-        }
+        return true;
+      } else if (args[1].equals("rotate")) {
+        hw_display.setRotation(args[2].toInt());
+        return true;
       }
       return false;
     }

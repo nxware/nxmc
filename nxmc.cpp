@@ -63,7 +63,7 @@ boolean Item::isActive() {
 String Item::name() { return "item";}
 String Item::type() { return "item";}
 bool Item::cmd(String args[]) {
-  if (args[0].equals(this->name())) {
+  if (args[0].equalsIgnoreCase(this->name())) {
     if (args[1].equals("activate")) {
       this->activate();
       return true;
@@ -97,7 +97,7 @@ Pin::Pin(int pin, String dir, String* _name) {
   }
 }
 bool Pin::cmd(String args[]) {
-  if (this->_name.equals(args[0])) {
+  if (this->_name.equalsIgnoreCase(args[0])) {
     if (args[1].equals("1")) {
       this->value = 1;
     } else if (args[1].equals("0")) {
@@ -178,6 +178,8 @@ String Pin::val(String name) {
     return String(this->value);
   } else if (name.equals("pin")) {
     return String(this->pin);
+  } else if (name.equals("comment")) {
+    return this->comment;
   }
   return "";
 }
@@ -234,7 +236,7 @@ HotPin::HotPin(int pin) {
   this->_name = String("pin" + String(pin));
 }
 bool HotPin::cmd(String args[]) {
-  if (this->_name.equals(args[0])) {
+  if (this->_name.equalsIgnoreCase(args[0])) {
     if (args[1].equals("trigger")) {
       this->value = 1;
       this->lasttrigger = millis();
@@ -285,7 +287,7 @@ AnalogPin::AnalogPin(int pin) {
   this->_name = String("pin" + String(pin));
 }
 bool AnalogPin::cmd(String args[]) {
-  if (this->_name.equals(args[0])) {
+  if (this->_name.equalsIgnoreCase(args[0])) {
     if (args[1].equals("read")) {
       this->value = 1;
     } else if (args[1].equals("print")) {
@@ -401,7 +403,7 @@ class NxAlias : public Item {
         return item != NULL ? item->val(name) : "";
     }
     virtual bool cmd(String args[]) override {
-      if (args[0].equals(this->_name)) {
+      if (args[0].equalsIgnoreCase(this->_name)) {
         Item* item = item_get(this->_to_name);
         if (item == NULL) return false;
         args[0] = this->_to_name;
@@ -430,8 +432,10 @@ class NxCmds : public Item {
     }
     bool cmd_gpio(String args[]) {
       if (args[1].equals("init_out")) {
-        // genauer befehl   gpio init_out 1
-        add_item(new Pin(args[2].toInt(), args[1]))->activate();
+        // genauer befehl   gpio init_out 1 ["Beschreibung"]
+        Pin* pin = new Pin(args[2].toInt(), args[1]);
+        pin->comment = args[3];
+        add_item(pin)->activate();
         return true;
       } else if (args[1].equals("write")) {
         processCommand("pin" + args[2] + " " + args[3]);
@@ -449,17 +453,29 @@ class NxCmds : public Item {
         }
       } else if (args[0].equals("hotpin")) {
         add_item(new HotPin(args[1].toInt()))->activate();
-      } else if (args[0].equals("n") && args[1].equals(nx_name())) {
+        return true;
+      } else if (args[0].equals("n")) {
+        if (!args[1].equals(nx_name())) {
+          return true; // fuer ein anderes Geraet: ignorieren
+        }
         args++; args++;
         return items_cmd(args);
       } else if (args[0].equals("rs485_init")) {
         this->rs485_pin = args[1].toInt();
-      } else if (args[0].equals("rs485_start") && this->rs485_pin != -1) {
-        digitalWrite(this->rs485_pin, 1);
-      } else if (args[0].equals("rs485_end") && this->rs485_pin != -1) {
-        delay(100);
-        digitalWrite(this->rs485_pin, 0);
-      } else if (args[0].equals("nack") && args[1].equals(nx_name())) {
+        return true;
+      } else if (args[0].equals("rs485_start")) {
+        if (this->rs485_pin != -1) digitalWrite(this->rs485_pin, 1);
+        return true;
+      } else if (args[0].equals("rs485_end")) {
+        if (this->rs485_pin != -1) {
+          delay(100);
+          digitalWrite(this->rs485_pin, 0);
+        }
+        return true;
+      } else if (args[0].equals("nack")) {
+        if (!args[1].equals(nx_name())) {
+          return true; // fuer ein anderes Geraet: ignorieren
+        }
         if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 1);
         Serial.print("ack ");
         Serial.println(args[2]);
@@ -467,6 +483,7 @@ class NxCmds : public Item {
         args++; args++;args++;
         items_cmd(args);
         if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 0);
+        return true;
       } else if (args[0].equals("ack")) {
         if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 1);
         Serial.print("ack ");
@@ -475,12 +492,14 @@ class NxCmds : public Item {
         args++; args++;
         items_cmd(args);
         if (this->rs485_pin!=-1) digitalWrite(this->rs485_pin, 0);
+        return true;
       } else if (args[0].equals("set_name")) {
         #ifdef ESP32
         preferences.begin("nx", false);
         preferences.putString("name", args[1]);
         preferences.end();
         #endif
+        return true;
       } else if (args[0].equals("print_val")) {
         add_item(new PrintVal(args[1], args[2], args[3].toInt()))->activate();
         return true;
